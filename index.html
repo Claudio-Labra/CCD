@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Centros Clandestinos de Detención</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+</head>
+
+<body>
+
+
+<!-- PANTALLA 1 -->
+
+<section class="panel presentacion">
+
+<h1>Centros Clandestinos de Detención en Argentina</h1>
+
+<p>Una cartografía de la represión ilegal</p>
+
+</section>
+
+
+
+<!-- PANTALLA 2 -->
+
+<section class="panel">
+
+<h2>CENTROS CLANDESTINOS DE DETENCIÓN</h2>
+
+<div id="total" class="contador">0</div>
+
+</section>
+
+
+
+<!-- PANTALLA 3 -->
+
+<section class="panel">
+
+<h2>LUGARES SEGÚN DEPENDENCIA</h2>
+
+<div class="grid">
+
+<div>ARMADA <span id="armada">0</span></div>
+<div>EJÉRCITO <span id="ejercito">0</span></div>
+<div>FUERZA AÉREA <span id="faa">0</span></div>
+<div>SEGURIDAD FEDERAL <span id="federal">0</span></div>
+<div>SEGURIDAD PROVINCIAL <span id="provincial">0</span></div>
+<div>OTROS <span id="otros">0</span></div>
+
+</div>
+
+</section>
+
+
+
+<!-- PANTALLA 4 -->
+
+<section class="panel">
+
+<h2>POR JURISDICCIÓN</h2>
+
+<div id="jurisdicciones"></div>
+
+</section>
+
+
+
+<!-- PANTALLA 5 -->
+
+<section class="panel">
+
+<h2>Compañerxs detenidxs-desaparecidxs</h2>
+
+<div id="desaparecidos" class="contador">0</div>
+
+</section>
+
+
+
+<!-- PANTALLA 6 -->
+
+<section id="mapa"></section>
+
+
+
+<script src="https://unpkg.com/countup.js/dist/countUp.umd.js"></script>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="script.js"></script>
+
+
+</body>
+</html>
