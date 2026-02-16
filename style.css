@@ -1,13 +1,17 @@
-body {
+body{
 
 margin:0;
-font-family:Arial;
-background:black;
+
+font-family: Georgia, serif;
+
+background:#111;
+
 color:white;
 
 }
 
-.panel {
+
+.panel{
 
 height:100vh;
 
@@ -19,50 +23,54 @@ justify-content:center;
 
 align-items:center;
 
+max-width:800px;
+
+margin:auto;
+
 text-align:center;
 
-padding:40px;
-
 }
 
-.presentacion {
 
-background:black;
-
-}
-
-.contador {
+.contador{
 
 font-size:80px;
 
 font-weight:bold;
 
-margin-top:20px;
+}
+
+
+#dependencias div,
+#jurisdicciones div{
+
+font-size:22px;
+
+margin:5px;
 
 }
 
-.grid {
 
-display:grid;
-
-grid-template-columns: 1fr 1fr;
-
-gap:20px;
-
-font-size:24px;
-
-}
-
-#mapa {
+#mapa{
 
 height:100vh;
 
 }
 
-#jurisdicciones {
 
-font-size:20px;
+.filtros{
 
-columns:2;
+margin:20px;
+
+}
+
+
+select{
+
+padding:10px;
+
+font-size:16px;
+
+margin:10px;
 
 }
