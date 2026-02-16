@@ -6,68 +6,57 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Centros Clandestinos de Detención</title>
-
-<link rel="stylesheet" href="style.css">
+<title>Centros Clandestinos en Argentina</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"/>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"/>
+
+<link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
 
-<!-- PANTALLA 1 -->
+<section class="panel intro">
 
-<section class="panel presentacion">
+<h1>Centros Clandestinos de Detención</h1>
 
-<h1>Centros Clandestinos de Detención en Argentina</h1>
-
-<p>Una cartografía de la represión ilegal</p>
+<p>Cartografía del terrorismo de Estado en Argentina</p>
 
 </section>
 
 
 
-<!-- PANTALLA 2 -->
-
 <section class="panel">
 
-<h2>CENTROS CLANDESTINOS DE DETENCIÓN</h2>
+<h2>CENTROS IDENTIFICADOS</h2>
 
-<div id="total" class="contador">0</div>
+<div id="contador-total" class="contador">0</div>
 
 </section>
 
 
 
-<!-- PANTALLA 3 -->
-
 <section class="panel">
 
-<h2>LUGARES SEGÚN DEPENDENCIA</h2>
+<h2>SEGÚN DEPENDENCIA</h2>
 
-<div class="grid">
-
-<div>ARMADA <span id="armada">0</span></div>
-<div>EJÉRCITO <span id="ejercito">0</span></div>
-<div>FUERZA AÉREA <span id="faa">0</span></div>
-<div>SEGURIDAD FEDERAL <span id="federal">0</span></div>
-<div>SEGURIDAD PROVINCIAL <span id="provincial">0</span></div>
-<div>OTROS <span id="otros">0</span></div>
-
-</div>
+<div id="dependencias"></div>
 
 </section>
 
 
 
-<!-- PANTALLA 4 -->
-
 <section class="panel">
 
-<h2>POR JURISDICCIÓN</h2>
+<h2>SEGÚN JURISDICCIÓN</h2>
 
 <div id="jurisdicciones"></div>
 
@@ -75,30 +64,40 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 
 
-<!-- PANTALLA 5 -->
-
 <section class="panel">
 
-<h2>Compañerxs detenidxs-desaparecidxs</h2>
+<h2>MAPA</h2>
 
-<div id="desaparecidos" class="contador">0</div>
+<div class="filtros">
+
+<select id="filtro-dependencia">
+<option value="todos">Todas las dependencias</option>
+</select>
+
+<select id="filtro-jurisdiccion">
+<option value="todos">Todas las jurisdicciones</option>
+</select>
+
+</div>
 
 </section>
 
 
 
-<!-- PANTALLA 6 -->
-
 <section id="mapa"></section>
 
 
+
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script src="https://unpkg.com/countup.js/dist/countUp.umd.js"></script>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
 <script src="script.js"></script>
 
-
 </body>
+
 </html>
