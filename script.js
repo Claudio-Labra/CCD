@@ -45,9 +45,8 @@ const PROV_DATA = {
   "Tierra del Fuego":                       1
 };
  
-/* GeoJSON con límites provinciales argentinos */
-const GEOJSON_URL =
-  'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/argentina.geojson';
+/* GeoJSON con límites provinciales argentinos — debe estar en la raíz del repo */
+const GEOJSON_URL = './argentina.geojson';
  
 /* ─────────────────────────────────────────────────────────
    TREEMAP DATA
@@ -183,19 +182,11 @@ function buildChoropleth() {
     .attr('viewBox', `0 0 ${W} ${H}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
  
-  /* Color scale: light teal (low) → dark teal (high) — igual que la imagen de referencia */
+  /* Color scale: dark background → vivid teal */
   const maxVal = d3.max(Object.values(PROV_DATA));
-  /* Escala logarítmica para que las provincias pequeñas también tengan color visible */
   const colorScale = d3.scaleSequential()
     .domain([0, maxVal])
-    .interpolator(t => {
-      /* t=0 → muy claro, t=1 → muy oscuro */
-      const inv = 1 - t;
-      /* light: #aaeae8  mid: #0db8b8  dark: #003a3a */
-      if (inv > 0.6)  return d3.interpolate('#aaeae8', '#2ec8c8')(1 - (inv - 0.6) / 0.4);
-      if (inv > 0.2)  return d3.interpolate('#2ec8c8', '#007a7a')(1 - (inv - 0.2) / 0.4);
-      return d3.interpolate('#007a7a', '#002e2e')(1 - inv / 0.2);
-    });
+    .interpolator(d3.interpolate('#0d2e2e', '#0ee8e8'));
  
   const tooltip = document.getElementById('map-tooltip');
  
@@ -206,17 +197,11 @@ function buildChoropleth() {
     })
     .then(geojson => {
  
-      /* Fit projection to container con padding generoso */
+      /* Fit projection to container */
       const projection = d3.geoMercator()
-        .fitExtent([[16, 16], [W - 16, H - 16]], geojson);
+        .fitExtent([[12, 12], [W - 12, H - 12]], geojson);
  
       const pathGen = d3.geoPath().projection(projection);
- 
-      /* Fondo negro para el área fuera de Argentina */
-      svg.append('rect')
-        .attr('x', 0).attr('y', 0)
-        .attr('width', W).attr('height', H)
-        .attr('fill', '#0c0c0c');
  
       /* Draw provinces */
       svg.selectAll('path.provincia-path')
@@ -227,7 +212,7 @@ function buildChoropleth() {
         .attr('d', pathGen)
         .attr('fill', d => {
           const count = lookupProvince(d.properties.name || d.properties.nombre || '');
-          return count !== null ? colorScale(count) : '#1e2e2e';
+          return count !== null ? colorScale(count) : '#1a1a1a';
         })
         /* Tooltip */
         .on('mousemove', function(event, d) {
@@ -243,6 +228,8 @@ function buildChoropleth() {
  
           const mx = event.clientX - rect.left;
           const my = event.clientY - rect.top;
+ 
+          /* Keep tooltip inside column */
           const tw = 200;
           const tx = mx + 14 + tw > rect.width ? mx - tw - 10 : mx + 14;
           const ty = my - 10;
@@ -251,9 +238,11 @@ function buildChoropleth() {
           tooltip.style.top  = ty + 'px';
           tooltip.classList.add('visible');
         })
-        .on('mouseleave', () => tooltip.classList.remove('visible'));
+        .on('mouseleave', () => {
+          tooltip.classList.remove('visible');
+        });
  
-      /* Number labels — centered, white, sized by projected bounding box */
+      /* Number labels — centered on each province */
       svg.selectAll('text.provincia-num')
         .data(geojson.features)
         .enter()
@@ -264,12 +253,9 @@ function buildChoropleth() {
           return `translate(${cx},${cy})`;
         })
         .attr('font-size', d => {
-          /* Tamaño de fuente basado en el bounding box proyectado */
-          const bounds = pathGen.bounds(d);
-          const bw = bounds[1][0] - bounds[0][0];
-          const bh = bounds[1][1] - bounds[0][1];
-          const minDim = Math.min(bw, bh);
-          return Math.min(Math.max(minDim * 0.38, 8), 22) + 'px';
+          const area = d3.geoArea(d);
+          /* Scale font roughly by province area */
+          return Math.min(Math.max(area * 18000, 6), 13) + 'px';
         })
         .text(d => {
           const name  = d.properties.name || d.properties.nombre || '';
