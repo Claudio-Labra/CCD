@@ -15,7 +15,7 @@ El trabajo no pretende ser exhaustivo ni académico. Es un **ensayo breve**, rea
 
 ### Fuente de información
 
-Los datos utilizados provienen del **Registro Unificado de Víctimas del Terrorismo de Estado (RUVTE)**, dependiente de la Agencia Nacional de Memorias (ANM) del Ministerio de Justicia y Derechos Humanos de la Nación.
+Los datos utilizados provienen del **Registro Unificado de Víctimas del Terrorismo de Estado (RUVTE)**, cuyas fuentes obran en la Secretaría de Derechos Humanos y el Archivo Nacional de la Memoria (ANM) del Ministerio de Justicia y Derechos Humanos de la Nación.
 
 🔗 [https://www.argentina.gob.ar/derechoshumanos/ANM/rutve](https://www.argentina.gob.ar/derechoshumanos/ANM/rutve)
 
