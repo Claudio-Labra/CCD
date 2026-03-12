@@ -74,30 +74,35 @@
 
   <!-- ══════════════════════════════════════════
        PANEL 3 · INFOGRAFÍA
-       Imagen estática  +  texto centrado  +  treemap
+       DOS COLUMNAS: mapa izq | stats der
   ══════════════════════════════════════════ -->
   <section class="panel panel-infographic" id="panel-2">
     <div class="noise-overlay"></div>
 
-    <div class="infographic-scroll">
+    <div class="info-layout">
 
-      <!-- Fila superior: mapa PNG estático + bloque texto centrado -->
-      <div class="info-top-row">
+      <!-- COLUMNA IZQUIERDA: imagen estática del mapa -->
+      <div class="info-col-map">
+        <!-- Subí tu imagen al repo como "mapa.png" -->
+        <img src="mapa.png" alt="Mapa de Centros Clandestinos de Detención en Argentina" class="info-map-img">
+      </div>
 
-        <!-- Subí tu imagen al repo con el nombre "mapa.png" -->
-        <div class="info-map-wrap">
-          <img src="mapa.png" alt="Mapa de Centros Clandestinos de Detención en Argentina" class="info-map-img">
+      <!-- COLUMNA DERECHA: título + texto + treemap -->
+      <div class="info-col-content">
+
+        <!-- Título + contador -->
+        <div class="info-header">
+          <h2 class="info-main-heading">
+            Centros Clandestinos de<br>Detención en todo el país
+          </h2>
+          <div class="info-counter-block">
+            <span class="counter-divider">|</span>
+            <span id="contador-807" class="mega-counter">0</span>
+          </div>
         </div>
 
-        <!-- Título con contador + textos editoriales -->
-        <div class="info-text-block">
-
-          <h2 class="info-main-heading">
-            Centros Clandestinos de Detención en todo el país
-            <span class="heading-divider">|</span>
-            <span id="contador-807" class="mega-counter">0</span>
-          </h2>
-
+        <!-- Textos editoriales -->
+        <div class="info-texts">
           <p class="info-text">
             A días de cumplirse el quincuagésimo aniversario de la dictadura cívico-militar
             en nuestro país, este trabajo tiene por objetivo constituir un pequeño aporte a la
@@ -106,7 +111,6 @@
             de tortura y exterminio contra su propia población civil, con particular énfasis en
             los sectores obreros organizados.
           </p>
-
           <p class="info-text">
             En un contexto en el que el actual gobierno &ldquo;libertario&rdquo; impulsa un
             discurso plagado de tergiversaciones históricas y falsedades, con el único objetivo
@@ -116,17 +120,17 @@
             organización, planificación y posterior despliegue de los numerosos centros
             clandestinos de detención y tortura que existieron a lo largo y ancho del país.
           </p>
-
         </div>
-      </div><!-- /info-top-row -->
 
-      <!-- Treemap: ancho completo, debajo -->
-      <div class="treemap-section">
-        <p class="chart-caption">CCDs por dependencia</p>
-        <div id="treemap-container"></div>
-      </div>
+        <!-- Treemap -->
+        <div class="treemap-section">
+          <div id="treemap-container"></div>
+          <p class="chart-caption">CCD por dependencia</p>
+        </div>
 
-    </div><!-- /infographic-scroll -->
+      </div><!-- /info-col-content -->
+
+    </div><!-- /info-layout -->
   </section>
 
   <!-- ══════════════════════════════════════════
@@ -135,7 +139,6 @@
   <section class="panel panel-mapa" id="panel-3">
 
     <div class="map-ui">
-
       <div class="map-header-bar">
         <h2 class="map-title">Mapa de Centros Clandestinos</h2>
         <div class="map-controls">
@@ -149,7 +152,6 @@
         </div>
       </div>
 
-      <!-- Botón volver al inicio -->
       <button class="btn-back-home" id="btn-back-home" aria-label="Volver al inicio">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15">
           <path d="M3 12L12 3L21 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -159,7 +161,6 @@
       </button>
 
       <div class="map-legend" id="map-legend"></div>
-
     </div>
 
     <div id="mapa-interactivo"></div>
