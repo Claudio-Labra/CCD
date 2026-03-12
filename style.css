@@ -11,10 +11,8 @@
   --bg:        #0c0c0c;
   --bg-mid:    #111111;
   --bg-card:   #161616;
-  --teal-dark: #0a7a7a;
   --teal:      #0db8b8;
   --teal-lt:   #3ddada;
-  --teal-pale: #a0ecec;
   --white:     #f0eeea;
   --muted:     #888880;
   --border:    rgba(255,255,255,0.08);
@@ -242,138 +240,139 @@ body {
 
 
 /* ============================================================
-   PANEL 3 · INFOGRAPHIC
+   PANEL 3 · INFOGRAFÍA  –  DOS COLUMNAS
    ============================================================ */
 .panel-infographic {
   background: var(--bg);
-  align-items: stretch;
-  justify-content: flex-start;
   padding: 0;
+  align-items: stretch;
+  justify-content: stretch;
 }
 
-.panel-infographic::before {
-  content: '';
-  position: absolute;
-  bottom: -100px; right: -100px;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(13,184,184,0.05) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Scrollable inner */
-.infographic-scroll {
+/* Grid principal: mapa izq, contenido der */
+.info-layout {
   position: relative;
   z-index: 2;
+  display: grid;
+  grid-template-columns: 42% 58%;
   width: 100%;
   height: 100vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 36px 0 48px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(13,184,184,0.2) transparent;
 }
 
-/* ── TOP ROW: mapa estático + bloque de texto ── */
-.info-top-row {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 52px;
-  align-items: start;
-  padding: 0 60px;
-  flex-shrink: 0;
-}
-
-.info-map-wrap {
+/* ── COLUMNA IZQUIERDA: imagen estática ── */
+.info-col-map {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
+  height: 100%;
+  background: #0e0e0e;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  padding: 24px 16px;
 }
 
 .info-map-img {
-  width: 100%;
-  max-width: 280px;
-  height: auto;
-  display: block;
-  min-height: 380px;
+  width: auto;
+  height: 100%;
+  max-height: 100vh;
+  max-width: 100%;
   object-fit: contain;
-  /* placeholder while image loads */
+  display: block;
+  /* Placeholder while image loads */
   background: repeating-linear-gradient(
     45deg,
-    #161616 0px, #161616 10px,
-    #111 10px, #111 20px
+    #141414 0px, #141414 10px,
+    #0e0e0e 10px, #0e0e0e 20px
   );
-  border: 1px solid var(--border);
+  min-height: 300px;
 }
 
-/* ── Text block: centrado ── */
-.info-text-block {
+/* ── COLUMNA DERECHA: título + texto + treemap ── */
+.info-col-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  text-align: center;
-  align-items: center;
+  justify-content: space-between;
+  padding: 44px 52px 36px 52px;
+  height: 100%;
+  overflow: hidden;
 }
 
-.info-main-heading {
-  font-size: clamp(15px, 1.8vw, 22px);
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--teal-lt);
-  letter-spacing: -0.01em;
+/* — Header: título + contador en línea — */
+.info-header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: center;
-  gap: 10px;
-}
-
-.heading-divider {
-  font-weight: 200;
-  color: var(--muted);
-  font-size: 0.9em;
-}
-
-.mega-counter {
-  font-size: clamp(52px, 7.5vw, 96px);
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  color: var(--white);
-  line-height: 1;
-  display: inline-block;
-}
-
-.info-text {
-  font-size: clamp(11.5px, 1vw, 13.5px);
-  font-weight: 300;
-  line-height: 1.8;
-  color: rgba(240,238,234,0.68);
-  max-width: 560px;
-  text-align: center;
-}
-
-/* ── Treemap section ── */
-.treemap-section {
-  margin-top: 24px;
-  padding: 0 60px 0;
+  align-items: flex-start;
+  gap: 0;
+  flex-wrap: nowrap;
   flex-shrink: 0;
 }
 
-.chart-caption {
-  font-size: 10px;
+.info-main-heading {
+  font-size: clamp(18px, 2.2vw, 30px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--teal-lt);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.info-counter-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 14px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding-top: 2px;
+}
+
+.counter-divider {
+  font-size: clamp(32px, 4vw, 58px);
+  font-weight: 200;
+  color: rgba(255,255,255,0.25);
+  line-height: 1;
+  align-self: flex-start;
+}
+
+.mega-counter {
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: var(--white);
+  line-height: 0.9;
+  display: inline-block;
+}
+
+/* — Textos — */
+.info-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.info-text {
+  font-size: clamp(11px, 0.95vw, 13px);
   font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--muted);
-  margin-bottom: 8px;
-  text-align: left;
+  line-height: 1.72;
+  color: rgba(240,238,234,0.68);
+  text-align: justify;
+}
+
+/* — Treemap — */
+.treemap-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  min-height: 0;
 }
 
 #treemap-container {
   width: 100%;
-  height: 190px;
-  overflow: hidden;
+  flex: 1;
+  min-height: 120px;
+  max-height: 210px;
 }
 
 #treemap-container svg {
@@ -393,7 +392,6 @@ body {
   font-weight: 700;
   fill: rgba(255,255,255,0.95);
   pointer-events: none;
-  dominant-baseline: auto;
 }
 
 .treemap-sub {
@@ -401,6 +399,14 @@ body {
   font-weight: 300;
   fill: rgba(255,255,255,0.55);
   pointer-events: none;
+}
+
+.chart-caption {
+  font-size: 10px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
 }
 
 
@@ -444,9 +450,6 @@ body {
 
 .map-controls {
   pointer-events: all;
-  display: flex;
-  align-items: center;
-  gap: 16px;
 }
 
 .tile-control {
@@ -483,7 +486,6 @@ body {
 #tile-select:focus  { outline: none; border-color: var(--teal); }
 #tile-select option { background: #1a1a1a; }
 
-/* Back-to-home button */
 .btn-back-home {
   pointer-events: all;
   display: flex;
@@ -509,7 +511,6 @@ body {
   color: var(--teal-lt);
 }
 
-/* Legend */
 .map-legend {
   display: flex;
   flex-direction: column;
@@ -587,7 +588,6 @@ body {
   letter-spacing: 0.06em;
 }
 
-/* Cluster */
 .marker-cluster-small,
 .marker-cluster-medium,
 .marker-cluster-large {
@@ -657,10 +657,23 @@ body {
    ============================================================ */
 @media (max-width: 900px) {
   .ruvte-inner { grid-template-columns: 1fr; gap: 30px; }
-  .info-top-row { grid-template-columns: 1fr; padding: 0 24px; }
-  .info-map-wrap { justify-content: center; }
-  .info-map-img  { max-width: 200px; min-height: 260px; }
-  .treemap-section { padding: 0 24px; }
-  .map-ui { flex-wrap: wrap; }
   .ruvte-stat-row { flex-direction: column; gap: 20px; }
+
+  .info-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 45vh 55vh;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .info-col-map {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+  }
+  .info-col-content {
+    padding: 24px 20px 20px;
+    overflow-y: auto;
+  }
+  .info-header { flex-wrap: wrap; }
+  .map-ui { flex-wrap: wrap; }
 }
