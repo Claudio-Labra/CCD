@@ -1,10 +1,8 @@
-/* ============================================================
-   CENTROS CLANDESTINOS DE DETENCIÓN · script.js
-   ============================================================ */
-
 'use strict';
 
-// ─── Tile layers ────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────
+   TILES (solo Oscuro y Satélite)
+───────────────────────────────────────────────────────── */
 const TILES = {
   dark: {
     url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
@@ -12,67 +10,44 @@ const TILES = {
   },
   satellite: {
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attr: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA'
-  },
-  topo: {
-    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-    attr: '&copy; OpenTopoMap'
-  },
-  streets: {
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attr: '&copy; OpenStreetMap contributors'
+    attr: '&copy; Esri'
   }
 };
 
-// ─── Province CCD counts (RUVTE data) ───────────────────────
-const PROVINCE_DATA = {
-  "Buenos Aires":                        259,
-  "Ciudad Autónoma de Buenos Aires":      62,
-  "Santa Fe":                             61,
-  "Córdoba":                              57,
-  "Corrientes":                           31,
-  "Misiones":                             37,
-  "Entre Ríos":                           29,
-  "Mendoza":                              40,
-  "Tucumán":                              14,
-  "Chaco":                                14,
-  "Jujuy":                                20,
-  "Salta":                                16,
-  "Formosa":                              12,
-  "Santiago del Estero":                  12,
-  "La Rioja":                              3,
-  "Catamarca":                            14,
-  "San Juan":                             19,
-  "San Luis":                             13,
-  "La Pampa":                             14,
-  "Neuquén":                              19,
-  "Río Negro":                            13,
-  "Chubut":                                8,
-  "Santa Cruz":                            4,
-  "Tierra del Fuego":                      1
+/* ─────────────────────────────────────────────────────────
+   DATOS TREEMAP (RUVTE)
+───────────────────────────────────────────────────────── */
+const TREEMAP_DATA = {
+  name: 'root',
+  children: [
+    { name: 'Fuerza de Seguridad Provincial', short: 'FSP',    value: 437, color: '#0a7a7a' },
+    { name: 'Fuerza de Seguridad Federal',    short: 'FSF',    value: 125, color: '#0db8b8' },
+    { name: 'Otros',                          short: 'Otros',  value: 108, color: '#3a5a5a' },
+    { name: 'Ejército',                       short: 'Ejér.',  value: 105, color: '#e8a020' },
+    { name: 'Armada',                         short: 'Arm.',   value: 17,  color: '#3a7fd5' },
+    { name: 'Fuerza Aérea',                   short: 'F.A.',   value: 15,  color: '#6cacee' }
+  ]
 };
 
-// ─── Dependencia color palette ───────────────────────────────
+/* ─────────────────────────────────────────────────────────
+   COLORES POR DEPENDENCIA (mapa)
+───────────────────────────────────────────────────────── */
 const DEP_COLORS = {
-  "Fuerza de Seguridad Provincial": "#0a7a7a",
-  "Fuerza de Seguridad Federal":    "#0db8b8",
-  "Ejército":                       "#e8a020",
-  "Armada":                         "#3a7fd5",
-  "Fuerza Aérea":                   "#6cacee",
-  "Otros":                          "#8888aa",
-  "default":                        "#444455"
+  provincial: '#0a7a7a',
+  federal:    '#0db8b8',
+  ejercito:   '#e8a020',
+  armada:     '#3a7fd5',
+  aerea:      '#6cacee',
+  otros:      '#3a5a5a',
+  default:    '#444455'
 };
 
-// ─── GeoJSON source ──────────────────────────────────────────
-const GEOJSON_URL =
-  'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/argentina.geojson';
-
-// ============================================================
-//  PANEL NAVIGATION
-// ============================================================
-const panels   = Array.from(document.querySelectorAll('.panel'));
-const arrow    = document.getElementById('nav-arrow');
-let current    = 0;
+/* ═══════════════════════════════════════════════════════════
+   NAVEGACIÓN POR PANELES
+══════════════════════════════════════════════════════════ */
+const panels    = Array.from(document.querySelectorAll('.panel'));
+const arrow     = document.getElementById('nav-arrow');
+let current     = 0;
 let isAnimating = false;
 
 function showPanel(index) {
@@ -81,82 +56,79 @@ function showPanel(index) {
 
   panels.forEach((p, i) => {
     p.classList.remove('active', 'above');
-    if (i < index)  p.classList.add('above');
+    if (i < index)   p.classList.add('above');
     if (i === index) p.classList.add('active');
   });
 
-  // Hide arrow on last panel
-  if (index === panels.length - 1) {
-    arrow.classList.add('hidden');
-  } else {
-    arrow.classList.remove('hidden');
-  }
+  arrow.classList.toggle('hidden', index === panels.length - 1);
 
-  // Trigger panel-specific init
   if (index === 2) initPanel3();
   if (index === 3) initPanel4();
 
-  setTimeout(() => { isAnimating = false; }, 950);
+  setTimeout(() => { isAnimating = false; }, 960);
 }
 
 function nextPanel() {
-  if (current < panels.length - 1) {
-    current++;
-    showPanel(current);
-  }
+  if (current < panels.length - 1) { current++; showPanel(current); }
 }
 
 function prevPanel() {
-  if (current > 0) {
-    current--;
-    showPanel(current);
-  }
+  if (current > 0) { current--; showPanel(current); }
+}
+
+function goHome() {
+  current = 0;
+  showPanel(0);
 }
 
 arrow.addEventListener('click', nextPanel);
 
-// Keyboard navigation
-document.addEventListener('keydown', (e) => {
+document.getElementById('btn-back-home').addEventListener('click', goHome);
+
+document.addEventListener('keydown', e => {
   if (e.key === 'ArrowDown' || e.key === 'PageDown') nextPanel();
   if (e.key === 'ArrowUp'   || e.key === 'PageUp')   prevPanel();
 });
 
-// Wheel / swipe navigation
 let wheelLock = false;
-document.addEventListener('wheel', (e) => {
+document.addEventListener('wheel', e => {
   if (wheelLock) return;
+  // Don't hijack scroll inside panel 3's scrollable area
+  const p3 = document.getElementById('panel-2');
+  if (p3 && p3.classList.contains('active')) {
+    const scroll = p3.querySelector('.infographic-scroll');
+    if (scroll) {
+      const atTop    = scroll.scrollTop === 0;
+      const atBottom = scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 2;
+      if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom)) return;
+    }
+  }
   wheelLock = true;
   if (e.deltaY > 30)  nextPanel();
   if (e.deltaY < -30) prevPanel();
   setTimeout(() => { wheelLock = false; }, 1100);
 }, { passive: true });
 
-// Touch swipe
 let touchStartY = 0;
-document.addEventListener('touchstart', (e) => {
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-document.addEventListener('touchend', (e) => {
+document.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+document.addEventListener('touchend',   e => {
   const dy = touchStartY - e.changedTouches[0].clientY;
-  if (Math.abs(dy) > 50) {
-    if (dy > 0) nextPanel(); else prevPanel();
-  }
+  if (Math.abs(dy) > 50) { if (dy > 0) nextPanel(); else prevPanel(); }
 }, { passive: true });
 
-// Init first panel
 showPanel(0);
 
 
-// ============================================================
-//  PANEL 3 · D3 CHOROPLETH + COUNTER
-// ============================================================
-let panel3Initialized = false;
+/* ═══════════════════════════════════════════════════════════
+   PANEL 3 · CONTADOR + TREEMAP
+══════════════════════════════════════════════════════════ */
+let panel3Init = false;
 
 function initPanel3() {
-  if (panel3Initialized) return;
-  panel3Initialized = true;
+  if (panel3Init) return;
+  panel3Init = true;
 
-  // ── Counter 807 ────────────────────────────────────────────
+  /* — CountUp 807 — */
   const cu = new countUp.CountUp('contador-807', 807, {
     duration: 3,
     useEasing: true,
@@ -164,132 +136,113 @@ function initPanel3() {
     separator: '.',
     decimal: ','
   });
-  setTimeout(() => cu.start(), 200);
+  setTimeout(() => cu.start(), 300);
 
-  // ── Animate bars ───────────────────────────────────────────
-  setTimeout(() => {
-    document.querySelectorAll('.dep-bar-fill').forEach(bar => {
-      bar.classList.add('animated');
-    });
-  }, 400);
-
-  // ── D3 choropleth map ─────────────────────────────────────
-  const svg = d3.select('#argentina-map');
-  const bbox = document.getElementById('argentina-map').getBoundingClientRect();
-  const W = 420, H = 720;
-
-  const projection = d3.geoMercator()
-    .center([-65, -38])
-    .scale(800)
-    .translate([W / 2, H / 2]);
-
-  const path = d3.geoPath().projection(projection);
-
-  // Color scale
-  const maxVal = d3.max(Object.values(PROVINCE_DATA));
-  const colorScale = d3.scaleSequential()
-    .domain([0, maxVal])
-    .interpolator(d3.interpolate('#0d2626', '#1de8e8'));
-
-  fetch(GEOJSON_URL)
-    .then(r => r.json())
-    .then(geojson => {
-      const g = svg.append('g');
-
-      g.selectAll('path')
-        .data(geojson.features)
-        .enter()
-        .append('path')
-        .attr('class', 'provincia-path')
-        .attr('d', path)
-        .attr('fill', d => {
-          const name  = d.properties.name || d.properties.nombre || '';
-          const count = matchProvince(name);
-          return count != null ? colorScale(count) : '#1a1a1a';
-        })
-        .append('title')
-        .text(d => {
-          const name  = d.properties.name || d.properties.nombre || '';
-          const count = matchProvince(name);
-          return count != null ? `${name}: ${count} CCDs` : name;
-        });
-
-      // Province number labels
-      g.selectAll('text')
-        .data(geojson.features)
-        .enter()
-        .append('text')
-        .attr('class', 'provincia-label')
-        .attr('transform', d => {
-          const c = path.centroid(d);
-          return `translate(${c[0]},${c[1]})`;
-        })
-        .text(d => {
-          const name  = d.properties.name || d.properties.nombre || '';
-          const count = matchProvince(name);
-          return count != null ? count : '';
-        })
-        .style('font-size', d => {
-          const name  = d.properties.name || d.properties.nombre || '';
-          const count = matchProvince(name);
-          return count && count > 50 ? '11px' : '8.5px';
-        })
-        .style('font-weight', d => {
-          const name  = d.properties.name || d.properties.nombre || '';
-          const count = matchProvince(name);
-          return count && count > 50 ? '800' : '700';
-        });
-    })
-    .catch(err => {
-      console.warn('GeoJSON no disponible:', err);
-      svg.append('text')
-        .attr('x', W / 2).attr('y', H / 2)
-        .attr('text-anchor', 'middle')
-        .attr('fill', '#555')
-        .attr('font-family', 'Outfit, sans-serif')
-        .attr('font-size', '13px')
-        .text('Mapa no disponible (sin conexión)');
-    });
+  /* — Treemap D3 — */
+  setTimeout(buildTreemap, 450);
 }
 
-// Fuzzy province name matcher
-function matchProvince(geoName) {
-  if (!geoName) return null;
+function buildTreemap() {
+  const container = document.getElementById('treemap-container');
+  if (!container) return;
 
-  // Direct match first
-  if (PROVINCE_DATA[geoName] !== undefined) return PROVINCE_DATA[geoName];
+  const W = container.clientWidth  || 900;
+  const H = container.clientHeight || 190;
 
-  // Normalize and try again
-  const norm = (s) => s
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim();
+  const root = d3.hierarchy(TREEMAP_DATA)
+    .sum(d => d.value)
+    .sort((a, b) => b.value - a.value);
 
-  const gn = norm(geoName);
+  d3.treemap()
+    .size([W, H])
+    .paddingOuter(3)
+    .paddingInner(2)
+    .round(true)(root);
 
-  for (const [key, val] of Object.entries(PROVINCE_DATA)) {
-    if (norm(key) === gn) return val;
-    if (gn.includes(norm(key)) || norm(key).includes(gn)) return val;
-  }
-  return null;
+  const svg = d3.select('#treemap-container')
+    .append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  const cell = svg.selectAll('g')
+    .data(root.leaves())
+    .enter()
+    .append('g')
+    .attr('transform', d => `translate(${d.x0},${d.y0})`);
+
+  /* Rectangle */
+  cell.append('rect')
+    .attr('class', 'treemap-cell')
+    .attr('width',  d => Math.max(0, d.x1 - d.x0))
+    .attr('height', d => Math.max(0, d.y1 - d.y0))
+    .attr('fill',   d => d.data.color)
+    .attr('rx', 2)
+    .append('title')
+    .text(d => `${d.data.name}: ${d.data.value} CCDs`);
+
+  /* Labels — only if cell is wide enough */
+  cell.each(function(d) {
+    const cw = d.x1 - d.x0;
+    const ch = d.y1 - d.y0;
+    const g  = d3.select(this);
+
+    if (cw < 38 || ch < 28) return; // too small
+
+    const showFull = cw > 120 && ch > 50;
+
+    /* Percentage */
+    g.append('text')
+      .attr('class', 'treemap-label')
+      .attr('x', 8)
+      .attr('y', ch / 2 - (showFull ? 10 : 0))
+      .attr('dominant-baseline', 'middle')
+      .attr('font-size', Math.min(cw * 0.18, 22) + 'px')
+      .text(d3.format('.0%')(d.data.value / 807));
+
+    if (showFull) {
+      /* Name below pct */
+      g.append('text')
+        .attr('class', 'treemap-sub')
+        .attr('x', 8)
+        .attr('y', ch / 2 + 14)
+        .attr('dominant-baseline', 'middle')
+        .attr('font-size', Math.min(cw * 0.08, 11) + 'px')
+        .text(d.data.name);
+
+      /* Count */
+      g.append('text')
+        .attr('class', 'treemap-sub')
+        .attr('x', 8)
+        .attr('y', ch - 8)
+        .attr('dominant-baseline', 'auto')
+        .attr('font-size', '10px')
+        .text(d.data.value);
+    } else if (cw > 55) {
+      /* Short label only */
+      g.append('text')
+        .attr('class', 'treemap-sub')
+        .attr('x', 8)
+        .attr('y', ch / 2 + 14)
+        .attr('dominant-baseline', 'middle')
+        .attr('font-size', '9px')
+        .text(d.data.short);
+    }
+  });
 }
 
 
-// ============================================================
-//  PANEL 4 · LEAFLET INTERACTIVE MAP
-// ============================================================
-let panel4Initialized = false;
+/* ═══════════════════════════════════════════════════════════
+   PANEL 4 · MAPA LEAFLET
+══════════════════════════════════════════════════════════ */
+let panel4Init = false;
 let leafletMap = null;
 let tileLayer  = null;
 let cluster    = null;
-let allData    = [];
 
 function initPanel4() {
-  if (panel4Initialized) return;
-  panel4Initialized = true;
+  if (panel4Init) return;
+  panel4Init = true;
 
-  // Init Leaflet
   leafletMap = L.map('mapa-interactivo', {
     center: [-38, -63],
     zoom: 5,
@@ -297,10 +250,8 @@ function initPanel4() {
     preferCanvas: true
   });
 
-  // Default dark tile
   setTile('dark');
 
-  // Marker cluster
   cluster = L.markerClusterGroup({
     maxClusterRadius: 50,
     spiderfyOnMaxZoom: true,
@@ -309,101 +260,82 @@ function initPanel4() {
   });
   leafletMap.addLayer(cluster);
 
-  // Load CSV
   Papa.parse('data.csv', {
     download: true,
     header: true,
     skipEmptyLines: true,
-    complete: (results) => {
-      allData = results.data;
-      buildMap(allData);
+    complete: results => {
+      buildMapMarkers(results.data);
       buildLegend();
     },
-    error: (err) => {
-      console.warn('Error cargando data.csv:', err);
-    }
+    error: err => console.warn('CSV error:', err)
   });
 
-  // Tile selector
-  document.getElementById('tile-select').addEventListener('change', (e) => {
-    setTile(e.target.value);
-  });
+  document.getElementById('tile-select').addEventListener('change', e => setTile(e.target.value));
 
-  // Fix map size after panel transition
   setTimeout(() => leafletMap.invalidateSize(), 1000);
 }
 
 function setTile(key) {
   const cfg = TILES[key] || TILES.dark;
   if (tileLayer) leafletMap.removeLayer(tileLayer);
-  tileLayer = L.tileLayer(cfg.url, {
-    attribution: cfg.attr,
-    maxZoom: 18
-  });
+  tileLayer = L.tileLayer(cfg.url, { attribution: cfg.attr, maxZoom: 18 });
   tileLayer.addTo(leafletMap);
 }
 
-function buildMap(data) {
+function buildMapMarkers(data) {
   cluster.clearLayers();
 
   data.forEach(row => {
-    const lat  = parseFloat(row['LATITUD']  || row['latitud']  || row['lat']);
-    const lon  = parseFloat(row['LONGITUD'] || row['longitud'] || row['lon']);
-    const dep  = (row['DEPENDENCIA'] || row['dependencia'] || '').trim();
-    const depS = (row['DEPENDENCIA SIMPLIF'] || row['dependencia_simplif'] || dep).trim();
-    const nom  = (row['NOMBRE ESTABLECIMIENTO'] || row['nombre_establecimiento'] || row['nombre'] || '').trim();
+    const lat   = parseFloat(row['LATITUD']  || row['latitud']  || '');
+    const lon   = parseFloat(row['LONGITUD'] || row['longitud'] || '');
+    const dep   = (row['DEPENDENCIA']        || '').trim();
+    const depS  = (row['DEPENDENCIA SIMPLIF']|| row['DEPENDENCIA_SIMPLIF'] || dep).trim();
+    const nom   = (row['NOMBRE ESTABLECIMIENTO'] || row['NOMBRE_ESTABLECIMIENTO'] || '').trim();
 
-    if (isNaN(lat) || isNaN(lon) || !lat || !lon) return;
+    if (!lat || !lon || isNaN(lat) || isNaN(lon)) return;
 
-    const color = getDepColor(dep);
+    const color = resolveColor(dep);
 
     const icon = L.divIcon({
       className: '',
       html: `<div style="
-        width:10px; height:10px;
-        border-radius:50%;
+        width:10px;height:10px;border-radius:50%;
         background:${color};
-        border:2px solid rgba(255,255,255,0.35);
-        box-shadow:0 0 6px ${color}88;
+        border:2px solid rgba(255,255,255,0.3);
+        box-shadow:0 0 6px ${color}99;
       "></div>`,
-      iconSize:   [10, 10],
+      iconSize: [10, 10],
       iconAnchor: [5, 5]
     });
 
     const marker = L.marker([lat, lon], { icon });
 
-    marker.bindPopup(
-      `<div class="popup-nombre">${nom || 'Sin nombre'}</div>` +
-      `<div class="popup-dep">${depS || dep || 'Sin datos'}</div>`,
-      { maxWidth: 280, className: '' }
+    marker.bindTooltip(
+      `<strong style="color:#3ddada;font-family:Outfit,sans-serif">${depS || dep}</strong>` +
+      `<br><span style="font-family:Outfit,sans-serif;font-size:12px">${nom}</span>`,
+      { direction: 'top', offset: [0, -6], opacity: 0.97 }
     );
 
-    // Tooltip on hover
-    marker.bindTooltip(
-      `<strong style="color:#3ddada">${depS || dep}</strong><br>${nom}`,
-      { direction: 'top', offset: [0, -6], opacity: 0.95 }
+    marker.bindPopup(
+      `<div class="popup-nombre">${nom || 'Sin nombre'}</div>` +
+      `<div class="popup-dep">${depS || dep || '–'}</div>`
     );
 
     cluster.addLayer(marker);
   });
 }
 
-function getDepColor(dep) {
+function resolveColor(dep) {
   if (!dep) return DEP_COLORS.default;
   const d = dep.toLowerCase();
-
-  if (d.includes('provincial') || d.includes('policía') || d.includes('policia'))
-    return DEP_COLORS['Fuerza de Seguridad Provincial'];
-  if (d.includes('federal') || d.includes('gendarm') || d.includes('prefect'))
-    return DEP_COLORS['Fuerza de Seguridad Federal'];
-  if (d.includes('ejército') || d.includes('ejercito') || d.includes('army'))
-    return DEP_COLORS['Ejército'];
-  if (d.includes('armada') || d.includes('navy') || d.includes('marina'))
-    return DEP_COLORS['Armada'];
-  if (d.includes('aérea') || d.includes('aerea') || d.includes('fuerza aérea'))
-    return DEP_COLORS['Fuerza Aérea'];
-
-  return DEP_COLORS['Otros'];
+  if (d.includes('provincial') || d.includes('polici'))    return DEP_COLORS.provincial;
+  if (d.includes('federal')    || d.includes('gendarm') ||
+      d.includes('prefect'))                               return DEP_COLORS.federal;
+  if (d.includes('ejérci')     || d.includes('ejerci'))   return DEP_COLORS.ejercito;
+  if (d.includes('armada')     || d.includes('marina'))   return DEP_COLORS.armada;
+  if (d.includes('aérea')      || d.includes('aerea'))    return DEP_COLORS.aerea;
+  return DEP_COLORS.otros;
 }
 
 function buildLegend() {
@@ -411,12 +343,12 @@ function buildLegend() {
   legend.innerHTML = '<div class="legend-title">Dependencia</div>';
 
   const entries = [
-    ['Fuerza de Seguridad Provincial', DEP_COLORS['Fuerza de Seguridad Provincial']],
-    ['Fuerza de Seguridad Federal',    DEP_COLORS['Fuerza de Seguridad Federal']],
-    ['Ejército',                        DEP_COLORS['Ejército']],
-    ['Armada',                          DEP_COLORS['Armada']],
-    ['Fuerza Aérea',                    DEP_COLORS['Fuerza Aérea']],
-    ['Otros',                           DEP_COLORS['Otros']]
+    ['Fuerza de Seguridad Provincial', DEP_COLORS.provincial],
+    ['Fuerza de Seguridad Federal',    DEP_COLORS.federal],
+    ['Ejército',                        DEP_COLORS.ejercito],
+    ['Armada',                          DEP_COLORS.armada],
+    ['Fuerza Aérea',                    DEP_COLORS.aerea],
+    ['Otros',                           DEP_COLORS.otros]
   ];
 
   entries.forEach(([label, color]) => {
