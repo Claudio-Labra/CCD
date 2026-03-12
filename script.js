@@ -98,8 +98,9 @@ function showPanel(index) {
 
   arrow.classList.toggle('hidden', index === panels.length - 1);
 
+  if (index === 1) initPanel2();
   if (index === 2) initPanel3();
-  if (index === 3) initPanel4();
+  if (index === 3) { setTimeout(() => initPanel4(), 50); }
 
   setTimeout(() => { isAnimating = false; }, 960);
 }
@@ -142,6 +143,25 @@ document.addEventListener('touchend', e => {
 }, { passive: true });
 
 showPanel(0);
+
+
+/* ═══════════════════════════════════════════════════════════
+   PANEL 2 · CONTADORES RUVTE
+══════════════════════════════════════════════════════════ */
+let panel2Init = false;
+
+function initPanel2() {
+  if (panel2Init) return;
+  panel2Init = true;
+
+  const opts = { duration: 2.5, useEasing: true, useGrouping: true, separator: '.', decimal: ',' };
+
+  const cuVic = new countUp.CountUp('contador-victimas', 8753, { ...opts, duration: 2.8 });
+  const cuCcd = new countUp.CountUp('contador-ccd',       807, { ...opts, duration: 2.2 });
+  const cuDes = new countUp.CountUp('contador-desap',   30000, { ...opts, duration: 3.2 });
+
+  setTimeout(() => { cuVic.start(); cuCcd.start(); cuDes.start(); }, 300);
+}
 
 
 /* ═══════════════════════════════════════════════════════════
@@ -426,38 +446,53 @@ function initPanel4() {
   if (panel4Init) return;
   panel4Init = true;
 
-  leafletMap = L.map('mapa-interactivo', {
-    center: [-38, -63],
-    zoom: 5,
-    zoomControl: true,
-    preferCanvas: true
-  });
+  /* El panel pasa de opacity:0 a visible durante 900ms de transición.
+     Esperamos a que el contenedor tenga dimensiones reales antes de inicializar Leaflet. */
+  const doInit = () => {
+    const el = document.getElementById('mapa-interactivo');
+    if (!el || el.clientWidth === 0) {
+      setTimeout(doInit, 100);
+      return;
+    }
 
-  setTile('dark');
+    leafletMap = L.map('mapa-interactivo', {
+      center: [-38, -63],
+      zoom: 5,
+      zoomControl: true,
+      preferCanvas: true
+    });
 
-  cluster = L.markerClusterGroup({
-    maxClusterRadius: 50,
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: true
-  });
-  leafletMap.addLayer(cluster);
+    setTile('dark');
 
-  Papa.parse('data.csv', {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: results => {
-      buildMapMarkers(results.data);
-      buildLegend();
-    },
-    error: err => console.warn('CSV error:', err)
-  });
+    cluster = L.markerClusterGroup({
+      maxClusterRadius: 50,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true
+    });
+    leafletMap.addLayer(cluster);
 
-  document.getElementById('tile-select')
-    .addEventListener('change', e => setTile(e.target.value));
+    Papa.parse('data.csv', {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: results => {
+        buildMapMarkers(results.data);
+        buildLegend();
+        /* Force size recalc after data loads */
+        leafletMap.invalidateSize();
+      },
+      error: err => console.warn('CSV error:', err)
+    });
 
-  setTimeout(() => leafletMap.invalidateSize(), 1000);
+    document.getElementById('tile-select')
+      .addEventListener('change', e => setTile(e.target.value));
+
+    /* Multiple invalidateSize calls to cover edge cases */
+    [300, 700, 1200].forEach(t => setTimeout(() => leafletMap.invalidateSize(), t));
+  };
+
+  doInit();
 }
 
 function setTile(key) {
