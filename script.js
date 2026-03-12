@@ -1,7 +1,7 @@
 'use strict';
 
 /* ─────────────────────────────────────────────────────────
-   TILES (solo Oscuro y Satélite)
+   TILES
 ───────────────────────────────────────────────────────── */
 const TILES = {
   dark: {
@@ -15,30 +15,30 @@ const TILES = {
 };
 
 /* ─────────────────────────────────────────────────────────
-   DATOS TREEMAP (RUVTE)
+   DATOS TREEMAP
 ───────────────────────────────────────────────────────── */
 const TREEMAP_DATA = {
   name: 'root',
   children: [
-    { name: 'Fuerza de Seguridad Provincial', short: 'FSP',    value: 437, color: '#0a7a7a' },
-    { name: 'Fuerza de Seguridad Federal',    short: 'FSF',    value: 125, color: '#0db8b8' },
-    { name: 'Otros',                          short: 'Otros',  value: 108, color: '#3a5a5a' },
-    { name: 'Ejército',                       short: 'Ejér.',  value: 105, color: '#e8a020' },
-    { name: 'Armada',                         short: 'Arm.',   value: 17,  color: '#3a7fd5' },
-    { name: 'Fuerza Aérea',                   short: 'F.A.',   value: 15,  color: '#6cacee' }
+    { name: 'Fuerza de Seguridad Provincial', short: 'F.S. Provincial', value: 437, color: '#0a7a7a' },
+    { name: 'Fuerza de Seguridad Federal',    short: 'F.S. Federal',    value: 125, color: '#0db8b8' },
+    { name: 'Otros',                          short: 'Otros',           value: 108, color: '#1e3a3a' },
+    { name: 'Ejército',                       short: 'Ejército',        value: 105, color: '#1adada' },
+    { name: 'Armada',                         short: 'Arm.',            value: 17,  color: '#3a7fd5' },
+    { name: 'Fuerza Aérea',                   short: 'F.A.',            value: 15,  color: '#55aaee' }
   ]
 };
 
 /* ─────────────────────────────────────────────────────────
-   COLORES POR DEPENDENCIA (mapa)
+   COLORES MARCADORES
 ───────────────────────────────────────────────────────── */
 const DEP_COLORS = {
   provincial: '#0a7a7a',
   federal:    '#0db8b8',
-  ejercito:   '#e8a020',
+  ejercito:   '#1adada',
   armada:     '#3a7fd5',
-  aerea:      '#6cacee',
-  otros:      '#3a5a5a',
+  aerea:      '#55aaee',
+  otros:      '#1e3a3a',
   default:    '#444455'
 };
 
@@ -82,7 +82,6 @@ function goHome() {
 }
 
 arrow.addEventListener('click', nextPanel);
-
 document.getElementById('btn-back-home').addEventListener('click', goHome);
 
 document.addEventListener('keydown', e => {
@@ -93,16 +92,6 @@ document.addEventListener('keydown', e => {
 let wheelLock = false;
 document.addEventListener('wheel', e => {
   if (wheelLock) return;
-  // Don't hijack scroll inside panel 3's scrollable area
-  const p3 = document.getElementById('panel-2');
-  if (p3 && p3.classList.contains('active')) {
-    const scroll = p3.querySelector('.infographic-scroll');
-    if (scroll) {
-      const atTop    = scroll.scrollTop === 0;
-      const atBottom = scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 2;
-      if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom)) return;
-    }
-  }
   wheelLock = true;
   if (e.deltaY > 30)  nextPanel();
   if (e.deltaY < -30) prevPanel();
@@ -110,8 +99,10 @@ document.addEventListener('wheel', e => {
 }, { passive: true });
 
 let touchStartY = 0;
-document.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
-document.addEventListener('touchend',   e => {
+document.addEventListener('touchstart', e => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchend', e => {
   const dy = touchStartY - e.changedTouches[0].clientY;
   if (Math.abs(dy) > 50) { if (dy > 0) nextPanel(); else prevPanel(); }
 }, { passive: true });
@@ -128,26 +119,24 @@ function initPanel3() {
   if (panel3Init) return;
   panel3Init = true;
 
-  /* — CountUp 807 — */
+  /* CountUp */
   const cu = new countUp.CountUp('contador-807', 807, {
-    duration: 3,
+    duration: 2.8,
     useEasing: true,
-    useGrouping: true,
-    separator: '.',
-    decimal: ','
+    useGrouping: false
   });
-  setTimeout(() => cu.start(), 300);
+  setTimeout(() => cu.start(), 200);
 
-  /* — Treemap D3 — */
-  setTimeout(buildTreemap, 450);
+  /* Treemap */
+  setTimeout(buildTreemap, 350);
 }
 
 function buildTreemap() {
   const container = document.getElementById('treemap-container');
   if (!container) return;
 
-  const W = container.clientWidth  || 900;
-  const H = container.clientHeight || 190;
+  const W = container.clientWidth  || 600;
+  const H = container.clientHeight || 180;
 
   const root = d3.hierarchy(TREEMAP_DATA)
     .sum(d => d.value)
@@ -155,7 +144,7 @@ function buildTreemap() {
 
   d3.treemap()
     .size([W, H])
-    .paddingOuter(3)
+    .paddingOuter(2)
     .paddingInner(2)
     .round(true)(root);
 
@@ -176,53 +165,56 @@ function buildTreemap() {
     .attr('width',  d => Math.max(0, d.x1 - d.x0))
     .attr('height', d => Math.max(0, d.y1 - d.y0))
     .attr('fill',   d => d.data.color)
-    .attr('rx', 2)
+    .attr('rx', 1)
     .append('title')
-    .text(d => `${d.data.name}: ${d.data.value} CCDs`);
+    .text(d => `${d.data.name}: ${d.data.value} CCDs (${Math.round(d.data.value/807*100)}%)`);
 
-  /* Labels — only if cell is wide enough */
+  /* Labels */
   cell.each(function(d) {
     const cw = d.x1 - d.x0;
     const ch = d.y1 - d.y0;
     const g  = d3.select(this);
 
-    if (cw < 38 || ch < 28) return; // too small
+    if (cw < 30 || ch < 22) return;
 
-    const showFull = cw > 120 && ch > 50;
+    const pct   = Math.round(d.data.value / 807 * 100) + '%';
+    const big   = cw > 140 && ch > 55;
+    const med   = cw > 70  && ch > 40;
+    const pxPct = Math.min(Math.max(cw * 0.16, 13), 24);
 
-    /* Percentage */
+    /* Percentage — always if fits */
     g.append('text')
       .attr('class', 'treemap-label')
-      .attr('x', 8)
-      .attr('y', ch / 2 - (showFull ? 10 : 0))
+      .attr('x', 7)
+      .attr('y', big ? ch * 0.38 : ch / 2)
       .attr('dominant-baseline', 'middle')
-      .attr('font-size', Math.min(cw * 0.18, 22) + 'px')
-      .text(d3.format('.0%')(d.data.value / 807));
+      .attr('font-size', pxPct + 'px')
+      .text(pct);
 
-    if (showFull) {
-      /* Name below pct */
+    if (big) {
+      /* Name */
       g.append('text')
         .attr('class', 'treemap-sub')
-        .attr('x', 8)
-        .attr('y', ch / 2 + 14)
+        .attr('x', 7)
+        .attr('y', ch * 0.62)
         .attr('dominant-baseline', 'middle')
-        .attr('font-size', Math.min(cw * 0.08, 11) + 'px')
+        .attr('font-size', Math.min(cw * 0.07, 11) + 'px')
         .text(d.data.name);
 
       /* Count */
       g.append('text')
         .attr('class', 'treemap-sub')
-        .attr('x', 8)
-        .attr('y', ch - 8)
+        .attr('x', 7)
+        .attr('y', ch - 7)
         .attr('dominant-baseline', 'auto')
         .attr('font-size', '10px')
         .text(d.data.value);
-    } else if (cw > 55) {
-      /* Short label only */
+
+    } else if (med) {
       g.append('text')
         .attr('class', 'treemap-sub')
-        .attr('x', 8)
-        .attr('y', ch / 2 + 14)
+        .attr('x', 7)
+        .attr('y', ch * 0.68)
         .attr('dominant-baseline', 'middle')
         .attr('font-size', '9px')
         .text(d.data.short);
@@ -271,7 +263,8 @@ function initPanel4() {
     error: err => console.warn('CSV error:', err)
   });
 
-  document.getElementById('tile-select').addEventListener('change', e => setTile(e.target.value));
+  document.getElementById('tile-select')
+    .addEventListener('change', e => setTile(e.target.value));
 
   setTimeout(() => leafletMap.invalidateSize(), 1000);
 }
@@ -287,11 +280,11 @@ function buildMapMarkers(data) {
   cluster.clearLayers();
 
   data.forEach(row => {
-    const lat   = parseFloat(row['LATITUD']  || row['latitud']  || '');
-    const lon   = parseFloat(row['LONGITUD'] || row['longitud'] || '');
-    const dep   = (row['DEPENDENCIA']        || '').trim();
-    const depS  = (row['DEPENDENCIA SIMPLIF']|| row['DEPENDENCIA_SIMPLIF'] || dep).trim();
-    const nom   = (row['NOMBRE ESTABLECIMIENTO'] || row['NOMBRE_ESTABLECIMIENTO'] || '').trim();
+    const lat  = parseFloat(row['LATITUD']  || row['latitud']  || '');
+    const lon  = parseFloat(row['LONGITUD'] || row['longitud'] || '');
+    const dep  = (row['DEPENDENCIA']        || '').trim();
+    const depS = (row['DEPENDENCIA SIMPLIF'] || row['DEPENDENCIA_SIMPLIF'] || dep).trim();
+    const nom  = (row['NOMBRE ESTABLECIMIENTO'] || row['NOMBRE_ESTABLECIMIENTO'] || '').trim();
 
     if (!lat || !lon || isNaN(lat) || isNaN(lon)) return;
 
