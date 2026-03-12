@@ -74,23 +74,23 @@
 
   <!-- ══════════════════════════════════════════
        PANEL 3 · INFOGRAFÍA
-       DOS COLUMNAS: mapa izq | stats der
+       DOS COLUMNAS: mapa D3 izq | stats der
   ══════════════════════════════════════════ -->
   <section class="panel panel-infographic" id="panel-2">
     <div class="noise-overlay"></div>
 
     <div class="info-layout">
 
-      <!-- COLUMNA IZQUIERDA: imagen estática del mapa -->
+      <!-- COLUMNA IZQUIERDA: mapa D3 coroplético -->
       <div class="info-col-map">
-        <!-- Subí tu imagen al repo como "mapa.png" -->
-        <img src="mapa.png" alt="Mapa de Centros Clandestinos de Detención en Argentina" class="info-map-img">
+        <svg id="choropleth-svg"></svg>
+        <!-- Tooltip -->
+        <div id="map-tooltip" class="map-tooltip"></div>
       </div>
 
       <!-- COLUMNA DERECHA: título + texto + treemap -->
       <div class="info-col-content">
 
-        <!-- Título + contador -->
         <div class="info-header">
           <h2 class="info-main-heading">
             Centros Clandestinos de<br>Detención en todo el país
@@ -101,7 +101,6 @@
           </div>
         </div>
 
-        <!-- Textos editoriales -->
         <div class="info-texts">
           <p class="info-text">
             A días de cumplirse el quincuagésimo aniversario de la dictadura cívico-militar
@@ -122,22 +121,19 @@
           </p>
         </div>
 
-        <!-- Treemap -->
         <div class="treemap-section">
           <div id="treemap-container"></div>
           <p class="chart-caption">CCD por dependencia</p>
         </div>
 
-      </div><!-- /info-col-content -->
-
-    </div><!-- /info-layout -->
+      </div>
+    </div>
   </section>
 
   <!-- ══════════════════════════════════════════
        PANEL 4 · MAPA INTERACTIVO
   ══════════════════════════════════════════ -->
   <section class="panel panel-mapa" id="panel-3">
-
     <div class="map-ui">
       <div class="map-header-bar">
         <h2 class="map-title">Mapa de Centros Clandestinos</h2>
@@ -166,18 +162,15 @@
     <div id="mapa-interactivo"></div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       FLECHA DE NAVEGACIÓN
-  ══════════════════════════════════════════ -->
+  <!-- FLECHA NAV -->
   <button class="nav-arrow" id="nav-arrow" aria-label="Siguiente sección">
-    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 32 32" fill="none">
       <line x1="16" y1="4" x2="16" y2="26" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
       <polyline points="8,19 16,27 24,19" stroke="currentColor" stroke-width="2.5"
                 stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
   </button>
 
-  <!-- Scripts -->
   <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/countup.js@2.8.0/dist/countUp.umd.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
