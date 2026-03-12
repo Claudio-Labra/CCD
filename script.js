@@ -15,7 +15,42 @@ const TILES = {
 };
 
 /* ─────────────────────────────────────────────────────────
-   DATOS TREEMAP
+   CCDs POR PROVINCIA  (fuente: RUVTE)
+   Las claves deben coincidir exactamente con el GeoJSON
+───────────────────────────────────────────────────────── */
+const PROV_DATA = {
+  "Buenos Aires":                         259,
+  "Ciudad Autónoma de Buenos Aires":       62,
+  "Santa Fe":                              61,
+  "Córdoba":                               57,
+  "Entre Ríos":                            29,
+  "Corrientes":                            31,
+  "Misiones":                              37,
+  "Chaco":                                 14,
+  "Formosa":                               12,
+  "Jujuy":                                 20,
+  "Salta":                                 16,
+  "Tucumán":                               49,
+  "Santiago del Estero":                   12,
+  "Catamarca":                             14,
+  "La Rioja":                               3,
+  "San Juan":                              19,
+  "San Luis":                              13,
+  "Mendoza":                               40,
+  "La Pampa":                              14,
+  "Neuquén":                               19,
+  "Río Negro":                             13,
+  "Chubut":                                 8,
+  "Santa Cruz":                             4,
+  "Tierra del Fuego":                       1
+};
+
+/* GeoJSON con límites provinciales argentinos */
+const GEOJSON_URL =
+  'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/argentina.geojson';
+
+/* ─────────────────────────────────────────────────────────
+   TREEMAP DATA
 ───────────────────────────────────────────────────────── */
 const TREEMAP_DATA = {
   name: 'root',
@@ -38,9 +73,10 @@ const DEP_COLORS = {
   ejercito:   '#1adada',
   armada:     '#3a7fd5',
   aerea:      '#55aaee',
-  otros:      '#1e3a3a',
+  otros:      '#1e4a4a',
   default:    '#444455'
 };
+
 
 /* ═══════════════════════════════════════════════════════════
    NAVEGACIÓN POR PANELES
@@ -71,11 +107,9 @@ function showPanel(index) {
 function nextPanel() {
   if (current < panels.length - 1) { current++; showPanel(current); }
 }
-
 function prevPanel() {
   if (current > 0) { current--; showPanel(current); }
 }
-
 function goHome() {
   current = 0;
   showPanel(0);
@@ -111,7 +145,7 @@ showPanel(0);
 
 
 /* ═══════════════════════════════════════════════════════════
-   PANEL 3 · CONTADOR + TREEMAP
+   PANEL 3 · CONTADOR + COROPLÉTICO D3 + TREEMAP
 ══════════════════════════════════════════════════════════ */
 let panel3Init = false;
 
@@ -119,7 +153,7 @@ function initPanel3() {
   if (panel3Init) return;
   panel3Init = true;
 
-  /* CountUp */
+  /* CountUp 807 */
   const cu = new countUp.CountUp('contador-807', 807, {
     duration: 2.8,
     useEasing: true,
@@ -127,10 +161,172 @@ function initPanel3() {
   });
   setTimeout(() => cu.start(), 200);
 
+  /* D3 choropleth */
+  buildChoropleth();
+
   /* Treemap */
   setTimeout(buildTreemap, 350);
 }
 
+
+/* ─────────────────────────────────────────────────────────
+   D3 CHOROPLETH MAP
+───────────────────────────────────────────────────────── */
+function buildChoropleth() {
+  const container = document.getElementById('choropleth-svg');
+  if (!container) return;
+
+  const W = container.clientWidth  || 500;
+  const H = container.clientHeight || window.innerHeight;
+
+  const svg = d3.select('#choropleth-svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  /* Color scale: dark background → vivid teal */
+  const maxVal = d3.max(Object.values(PROV_DATA));
+  const colorScale = d3.scaleSequential()
+    .domain([0, maxVal])
+    .interpolator(d3.interpolate('#0d2e2e', '#0ee8e8'));
+
+  const tooltip = document.getElementById('map-tooltip');
+
+  fetch(GEOJSON_URL)
+    .then(r => {
+      if (!r.ok) throw new Error('GeoJSON fetch failed');
+      return r.json();
+    })
+    .then(geojson => {
+
+      /* Fit projection to container */
+      const projection = d3.geoMercator()
+        .fitExtent([[12, 12], [W - 12, H - 12]], geojson);
+
+      const pathGen = d3.geoPath().projection(projection);
+
+      /* Draw provinces */
+      svg.selectAll('path.provincia-path')
+        .data(geojson.features)
+        .enter()
+        .append('path')
+        .attr('class', 'provincia-path')
+        .attr('d', pathGen)
+        .attr('fill', d => {
+          const count = lookupProvince(d.properties.name || d.properties.nombre || '');
+          return count !== null ? colorScale(count) : '#1a1a1a';
+        })
+        /* Tooltip */
+        .on('mousemove', function(event, d) {
+          const name  = d.properties.name || d.properties.nombre || 'Provincia';
+          const count = lookupProvince(name);
+          const rect  = container.closest('.info-col-map').getBoundingClientRect();
+
+          tooltip.innerHTML =
+            `<div class="tooltip-name">${name}</div>` +
+            `<div class="tooltip-count">${count !== null
+              ? `<strong>${count}</strong> centros clandestinos`
+              : 'Sin datos'}</div>`;
+
+          const mx = event.clientX - rect.left;
+          const my = event.clientY - rect.top;
+
+          /* Keep tooltip inside column */
+          const tw = 200;
+          const tx = mx + 14 + tw > rect.width ? mx - tw - 10 : mx + 14;
+          const ty = my - 10;
+
+          tooltip.style.left = tx + 'px';
+          tooltip.style.top  = ty + 'px';
+          tooltip.classList.add('visible');
+        })
+        .on('mouseleave', () => {
+          tooltip.classList.remove('visible');
+        });
+
+      /* Number labels — centered on each province */
+      svg.selectAll('text.provincia-num')
+        .data(geojson.features)
+        .enter()
+        .append('text')
+        .attr('class', 'provincia-num')
+        .attr('transform', d => {
+          const [cx, cy] = pathGen.centroid(d);
+          return `translate(${cx},${cy})`;
+        })
+        .attr('font-size', d => {
+          const area = d3.geoArea(d);
+          /* Scale font roughly by province area */
+          return Math.min(Math.max(area * 18000, 6), 13) + 'px';
+        })
+        .text(d => {
+          const name  = d.properties.name || d.properties.nombre || '';
+          const count = lookupProvince(name);
+          return count !== null ? count : '';
+        });
+
+    })
+    .catch(err => {
+      console.warn('Error cargando GeoJSON:', err);
+      /* Fallback message */
+      svg.append('text')
+        .attr('x', W / 2).attr('y', H / 2 - 12)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#555')
+        .attr('font-family', 'Outfit, sans-serif')
+        .attr('font-size', '13px')
+        .text('No se pudo cargar el mapa.');
+
+      svg.append('text')
+        .attr('x', W / 2).attr('y', H / 2 + 10)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#444')
+        .attr('font-family', 'Outfit, sans-serif')
+        .attr('font-size', '11px')
+        .text('Requiere conexión a internet.');
+    });
+}
+
+/* Fuzzy lookup: normalize accents + lowercase and try partial match */
+function normalizeStr(s) {
+  return s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+function lookupProvince(geoName) {
+  if (!geoName) return null;
+
+  /* Exact match first */
+  if (PROV_DATA[geoName] !== undefined) return PROV_DATA[geoName];
+
+  const gn = normalizeStr(geoName);
+
+  for (const [key, val] of Object.entries(PROV_DATA)) {
+    const kn = normalizeStr(key);
+    if (kn === gn)                  return val;
+    if (kn.includes(gn))            return val;
+    if (gn.includes(kn))            return val;
+  }
+
+  /* Special aliases */
+  const aliases = {
+    'tierra del fuego, antartida e islas del atlantico sur': 'Tierra del Fuego',
+    'ciudad de buenos aires': 'Ciudad Autónoma de Buenos Aires',
+    'caba': 'Ciudad Autónoma de Buenos Aires',
+    'gba': 'Buenos Aires'
+  };
+  const alias = aliases[gn];
+  if (alias && PROV_DATA[alias] !== undefined) return PROV_DATA[alias];
+
+  return null;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   D3 TREEMAP
+───────────────────────────────────────────────────────── */
 function buildTreemap() {
   const container = document.getElementById('treemap-container');
   if (!container) return;
@@ -159,7 +355,6 @@ function buildTreemap() {
     .append('g')
     .attr('transform', d => `translate(${d.x0},${d.y0})`);
 
-  /* Rectangle */
   cell.append('rect')
     .attr('class', 'treemap-cell')
     .attr('width',  d => Math.max(0, d.x1 - d.x0))
@@ -167,22 +362,20 @@ function buildTreemap() {
     .attr('fill',   d => d.data.color)
     .attr('rx', 1)
     .append('title')
-    .text(d => `${d.data.name}: ${d.data.value} CCDs (${Math.round(d.data.value/807*100)}%)`);
+    .text(d => `${d.data.name}: ${d.data.value} CCDs (${Math.round(d.data.value / 807 * 100)}%)`);
 
-  /* Labels */
   cell.each(function(d) {
-    const cw = d.x1 - d.x0;
-    const ch = d.y1 - d.y0;
-    const g  = d3.select(this);
+    const cw  = d.x1 - d.x0;
+    const ch  = d.y1 - d.y0;
+    const g   = d3.select(this);
+    const pct = Math.round(d.data.value / 807 * 100) + '%';
 
-    if (cw < 30 || ch < 22) return;
+    if (cw < 28 || ch < 20) return;
 
-    const pct   = Math.round(d.data.value / 807 * 100) + '%';
-    const big   = cw > 140 && ch > 55;
-    const med   = cw > 70  && ch > 40;
-    const pxPct = Math.min(Math.max(cw * 0.16, 13), 24);
+    const big = cw > 140 && ch > 55;
+    const med = cw > 65  && ch > 38;
+    const pxPct = Math.min(Math.max(cw * 0.15, 12), 22);
 
-    /* Percentage — always if fits */
     g.append('text')
       .attr('class', 'treemap-label')
       .attr('x', 7)
@@ -192,16 +385,14 @@ function buildTreemap() {
       .text(pct);
 
     if (big) {
-      /* Name */
       g.append('text')
         .attr('class', 'treemap-sub')
         .attr('x', 7)
-        .attr('y', ch * 0.62)
+        .attr('y', ch * 0.63)
         .attr('dominant-baseline', 'middle')
         .attr('font-size', Math.min(cw * 0.07, 11) + 'px')
         .text(d.data.name);
 
-      /* Count */
       g.append('text')
         .attr('class', 'treemap-sub')
         .attr('x', 7)
@@ -322,12 +513,12 @@ function buildMapMarkers(data) {
 function resolveColor(dep) {
   if (!dep) return DEP_COLORS.default;
   const d = dep.toLowerCase();
-  if (d.includes('provincial') || d.includes('polici'))    return DEP_COLORS.provincial;
+  if (d.includes('provincial') || d.includes('polici'))              return DEP_COLORS.provincial;
   if (d.includes('federal')    || d.includes('gendarm') ||
-      d.includes('prefect'))                               return DEP_COLORS.federal;
-  if (d.includes('ejérci')     || d.includes('ejerci'))   return DEP_COLORS.ejercito;
-  if (d.includes('armada')     || d.includes('marina'))   return DEP_COLORS.armada;
-  if (d.includes('aérea')      || d.includes('aerea'))    return DEP_COLORS.aerea;
+      d.includes('prefect'))                                          return DEP_COLORS.federal;
+  if (d.includes('ejérci')     || d.includes('ejerci'))              return DEP_COLORS.ejercito;
+  if (d.includes('armada')     || d.includes('marina'))              return DEP_COLORS.armada;
+  if (d.includes('aérea')      || d.includes('aerea'))               return DEP_COLORS.aerea;
   return DEP_COLORS.otros;
 }
 
