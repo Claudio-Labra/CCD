@@ -240,7 +240,7 @@ body {
 
 
 /* ============================================================
-   PANEL 3 · INFOGRAFÍA  –  DOS COLUMNAS
+   PANEL 3 · INFOGRAFÍA DOS COLUMNAS
    ============================================================ */
 .panel-infographic {
   background: var(--bg);
@@ -249,7 +249,6 @@ body {
   justify-content: stretch;
 }
 
-/* Grid principal: mapa izq, contenido der */
 .info-layout {
   position: relative;
   z-index: 2;
@@ -259,8 +258,9 @@ body {
   height: 100vh;
 }
 
-/* ── COLUMNA IZQUIERDA: imagen estática ── */
+/* ── Columna izquierda: mapa D3 ── */
 .info-col-map {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -268,26 +268,78 @@ body {
   background: #0e0e0e;
   border-right: 1px solid var(--border);
   overflow: hidden;
-  padding: 24px 16px;
 }
 
-.info-map-img {
-  width: auto;
+#choropleth-svg {
+  width: 100%;
   height: 100%;
-  max-height: 100vh;
-  max-width: 100%;
-  object-fit: contain;
   display: block;
-  /* Placeholder while image loads */
-  background: repeating-linear-gradient(
-    45deg,
-    #141414 0px, #141414 10px,
-    #0e0e0e 10px, #0e0e0e 20px
-  );
-  min-height: 300px;
 }
 
-/* ── COLUMNA DERECHA: título + texto + treemap ── */
+/* Province paths */
+.provincia-path {
+  stroke: #0c0c0c;
+  stroke-width: 0.6;
+  cursor: default;
+  transition: opacity 0.18s, filter 0.18s;
+}
+
+.provincia-path:hover {
+  opacity: 0.75;
+  filter: brightness(1.25);
+}
+
+/* Number labels on provinces */
+.provincia-num {
+  font-family: var(--font);
+  font-weight: 700;
+  fill: rgba(0, 0, 0, 0.65);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Tooltip */
+.map-tooltip {
+  position: absolute;
+  background: rgba(10,10,10,0.95);
+  border: 1px solid rgba(13,184,184,0.35);
+  border-radius: 2px;
+  padding: 8px 12px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--white);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.map-tooltip.visible {
+  opacity: 1;
+}
+
+.tooltip-name {
+  font-weight: 600;
+  color: var(--teal-lt);
+  margin-bottom: 3px;
+  font-size: 13px;
+}
+
+.tooltip-count {
+  font-weight: 300;
+  color: rgba(240,238,234,0.75);
+}
+
+.tooltip-count strong {
+  font-weight: 700;
+  color: var(--white);
+}
+
+/* ── Columna derecha ── */
 .info-col-content {
   display: flex;
   flex-direction: column;
@@ -297,7 +349,6 @@ body {
   overflow: hidden;
 }
 
-/* — Header: título + contador en línea — */
 .info-header {
   display: flex;
   align-items: flex-start;
@@ -330,7 +381,6 @@ body {
   font-weight: 200;
   color: rgba(255,255,255,0.25);
   line-height: 1;
-  align-self: flex-start;
 }
 
 .mega-counter {
@@ -342,7 +392,6 @@ body {
   display: inline-block;
 }
 
-/* — Textos — */
 .info-texts {
   display: flex;
   flex-direction: column;
@@ -358,7 +407,6 @@ body {
   text-align: justify;
 }
 
-/* — Treemap — */
 .treemap-section {
   flex: 1;
   display: flex;
@@ -448,9 +496,7 @@ body {
   letter-spacing: -0.01em;
 }
 
-.map-controls {
-  pointer-events: all;
-}
+.map-controls { pointer-events: all; }
 
 .tile-control {
   display: flex;
@@ -558,7 +604,6 @@ body {
   z-index: 100;
 }
 
-/* Leaflet popup */
 .leaflet-popup-content-wrapper {
   background: #111;
   border: 1px solid rgba(13,184,184,0.3);
@@ -643,10 +688,6 @@ body {
   50%       { transform: translateX(-50%) translateY(6px); }
 }
 
-
-/* ============================================================
-   SCROLLBAR
-   ============================================================ */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(13,184,184,0.2); border-radius: 2px; }
@@ -658,22 +699,12 @@ body {
 @media (max-width: 900px) {
   .ruvte-inner { grid-template-columns: 1fr; gap: 30px; }
   .ruvte-stat-row { flex-direction: column; gap: 20px; }
-
   .info-layout {
     grid-template-columns: 1fr;
     grid-template-rows: 45vh 55vh;
-    height: 100vh;
-    overflow: hidden;
   }
-  .info-col-map {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 16px;
-  }
-  .info-col-content {
-    padding: 24px 20px 20px;
-    overflow-y: auto;
-  }
+  .info-col-map { border-right: none; border-bottom: 1px solid var(--border); }
+  .info-col-content { padding: 24px 20px; overflow-y: auto; }
   .info-header { flex-wrap: wrap; }
   .map-ui { flex-wrap: wrap; }
 }
