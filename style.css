@@ -182,9 +182,10 @@ body {
 }
 
 .ruvte-question h2 {
-  font-size: clamp(20px, 2.5vw, 30px);
-  font-weight: 700;
-  line-height: 1.2;
+  font-size: clamp(36px, 6.5vw, 88px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
   color: var(--white);
 }
 
@@ -292,16 +293,12 @@ body {
 /* Number labels on provinces */
 .provincia-num {
   font-family: var(--font);
-  font-weight: 800;
-  fill: #ffffff;
+  font-weight: 700;
+  fill: rgba(0, 0, 0, 0.65);
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
   user-select: none;
-  paint-order: stroke fill;
-  stroke: rgba(0, 0, 0, 0.45);
-  stroke-width: 2.5px;
-  stroke-linejoin: round;
 }
 
 /* Tooltip */
@@ -401,6 +398,7 @@ body {
   flex-direction: column;
   gap: 14px;
   flex-shrink: 0;
+  margin-top: 28px;
 }
 
 .info-text {
