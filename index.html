@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Centros Clandestinos de Detención · Argentina</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
@@ -19,9 +17,9 @@
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
        PANEL 1 · INTRO
-  ════════════════════════════════════════════ -->
+  ══════════════════════════════════════════ -->
   <section class="panel panel-intro" id="panel-0">
     <div class="noise-overlay"></div>
     <div class="intro-inner">
@@ -34,9 +32,9 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
        PANEL 2 · RUVTE
-  ════════════════════════════════════════════ -->
+  ══════════════════════════════════════════ -->
   <section class="panel panel-ruvte" id="panel-1">
     <div class="noise-overlay"></div>
     <div class="ruvte-inner">
@@ -46,15 +44,15 @@
       </div>
       <div class="ruvte-body">
         <p>
-          El <strong>Registro Unificado de Víctimas del Terrorismo de Estado</strong> (RUVTE) 
-          es el instrumento oficial creado por el Estado argentino para identificar, relevar y 
-          sistematizar la información sobre las personas víctimas del terrorismo de Estado ejercido 
-          durante la última dictadura cívico-militar (1976–1983).
+          El <strong>Registro Unificado de Víctimas del Terrorismo de Estado</strong> (RUVTE)
+          es el instrumento oficial creado por el Estado argentino para identificar, relevar y
+          sistematizar la información sobre las personas víctimas del terrorismo de Estado
+          ejercido durante la última dictadura cívico-militar (1976–1983).
         </p>
         <p>
-          Fue creado mediante la <strong>Resolución Ministerial N.° 1261/14</strong> del 
-          Ministerio de Justicia y Derechos Humanos de la Nación. Su objetivo central es contribuir 
-          a la reconstrucción de la memoria, la verdad y la justicia.
+          Fue creado mediante la <strong>Resolución Ministerial N.° 1261/14</strong> del
+          Ministerio de Justicia y Derechos Humanos de la Nación. Su objetivo central es
+          contribuir a la reconstrucción de la memoria, la verdad y la justicia.
         </p>
         <div class="ruvte-stat-row">
           <div class="ruvte-stat">
@@ -74,145 +72,107 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       PANEL 3 · INFOGRAPHIC
-  ════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════
+       PANEL 3 · INFOGRAFÍA
+       Imagen estática  +  texto centrado  +  treemap
+  ══════════════════════════════════════════ -->
   <section class="panel panel-infographic" id="panel-2">
     <div class="noise-overlay"></div>
-    <div class="infographic-grid">
 
-      <!-- LEFT: Argentina choropleth map -->
-      <div class="infographic-left">
-        <svg id="argentina-map" viewBox="0 0 420 720" preserveAspectRatio="xMidYMid meet"></svg>
-      </div>
+    <div class="infographic-scroll">
 
-      <!-- RIGHT: Stats -->
-      <div class="infographic-right">
-        <h2 class="info-heading">
-          Centros Clandestinos de<br>Detención en todo el país
-        </h2>
+      <!-- Fila superior: mapa PNG estático + bloque texto centrado -->
+      <div class="info-top-row">
 
-        <div class="counter-row">
-          <span id="contador-807" class="mega-counter">0</span>
+        <!-- Subí tu imagen al repo con el nombre "mapa.png" -->
+        <div class="info-map-wrap">
+          <img src="mapa.png" alt="Mapa de Centros Clandestinos de Detención en Argentina" class="info-map-img">
         </div>
 
-        <p class="info-text">
-          A días de cumplirse el quincuagésimo aniversario de la dictadura 
-          cívico-militar, este trabajo busca constituir un aporte a la comprensión 
-          de este período histórico. Durante el mismo, el Estado —con la anuencia 
-          de amplios sectores de la burguesía nacional y el clero— desplegó un 
-          plan sistemático de tortura y exterminio contra su propia población civil.
-        </p>
-        <p class="info-text">
-          Esta cartografía busca visibilizar la organización, planificación 
-          y despliegue de los numerosos centros clandestinos de detención y 
-          tortura que existieron a lo largo y ancho del país.
-        </p>
+        <!-- Título con contador + textos editoriales -->
+        <div class="info-text-block">
 
-        <!-- Bar chart by dependencia -->
-        <div class="dep-chart">
-          <div class="dep-bar-wrap" data-pct="54">
-            <div class="dep-bar-track">
-              <div class="dep-bar-fill" style="--target: 54%; background:#0a7a7a;"></div>
-            </div>
-            <div class="dep-bar-meta">
-              <span class="dep-pct">54%</span>
-              <span class="dep-name">Fuerza de Seguridad Provincial</span>
-              <span class="dep-count">437</span>
-            </div>
-          </div>
-          <div class="dep-bar-wrap" data-pct="15">
-            <div class="dep-bar-track">
-              <div class="dep-bar-fill" style="--target: 15%; background:#0d9e9e;"></div>
-            </div>
-            <div class="dep-bar-meta">
-              <span class="dep-pct">15%</span>
-              <span class="dep-name">Fuerza de Seguridad Federal</span>
-              <span class="dep-count">125</span>
-            </div>
-          </div>
-          <div class="dep-bar-wrap" data-pct="15">
-            <div class="dep-bar-track">
-              <div class="dep-bar-fill" style="--target: 15%; background:#12baba;"></div>
-            </div>
-            <div class="dep-bar-meta">
-              <span class="dep-pct">15%</span>
-              <span class="dep-name">Otros</span>
-              <span class="dep-count">108</span>
-            </div>
-          </div>
-          <div class="dep-bar-wrap" data-pct="13">
-            <div class="dep-bar-track">
-              <div class="dep-bar-fill" style="--target: 13%; background:#1ad4d4;"></div>
-            </div>
-            <div class="dep-bar-meta">
-              <span class="dep-pct">13%</span>
-              <span class="dep-name">Ejército</span>
-              <span class="dep-count">105</span>
-            </div>
-          </div>
-          <div class="dep-bar-wrap" data-pct="2">
-            <div class="dep-bar-track">
-              <div class="dep-bar-fill" style="--target: 2%; background:#44e0e0;"></div>
-            </div>
-            <div class="dep-bar-meta">
-              <span class="dep-pct">2%</span>
-              <span class="dep-name">Armada</span>
-              <span class="dep-count">17</span>
-            </div>
-          </div>
-          <div class="dep-bar-wrap" data-pct="2">
-            <div class="dep-bar-track">
-              <div class="dep-bar-fill" style="--target: 2%; background:#6eeaea;"></div>
-            </div>
-            <div class="dep-bar-meta">
-              <span class="dep-pct">2%</span>
-              <span class="dep-name">Fuerza Aérea</span>
-              <span class="dep-count">15</span>
-            </div>
-          </div>
-          <p class="chart-caption">CCDs por dependencia</p>
+          <h2 class="info-main-heading">
+            Centros Clandestinos de Detención en todo el país
+            <span class="heading-divider">|</span>
+            <span id="contador-807" class="mega-counter">0</span>
+          </h2>
+
+          <p class="info-text">
+            A días de cumplirse el quincuagésimo aniversario de la dictadura cívico-militar
+            en nuestro país, este trabajo tiene por objetivo constituir un pequeño aporte a la
+            comprensión de este período histórico. Durante el mismo, el Estado —con la anuencia
+            de amplios sectores de la burguesía nacional y el clero— desplegó un plan sistemático
+            de tortura y exterminio contra su propia población civil, con particular énfasis en
+            los sectores obreros organizados.
+          </p>
+
+          <p class="info-text">
+            En un contexto en el que el actual gobierno &ldquo;libertario&rdquo; impulsa un
+            discurso plagado de tergiversaciones históricas y falsedades, con el único objetivo
+            de reinstaurar la llamada teoría de los dos demonios —según la cual los militares
+            habrían cometido meros &ldquo;excesos&rdquo; en el marco de una supuesta
+            &ldquo;guerra&rdquo;—, esta cartografía del terror estatal busca visibilizar la
+            organización, planificación y posterior despliegue de los numerosos centros
+            clandestinos de detención y tortura que existieron a lo largo y ancho del país.
+          </p>
+
         </div>
+      </div><!-- /info-top-row -->
 
+      <!-- Treemap: ancho completo, debajo -->
+      <div class="treemap-section">
+        <p class="chart-caption">CCDs por dependencia</p>
+        <div id="treemap-container"></div>
       </div>
-    </div>
+
+    </div><!-- /infographic-scroll -->
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       PANEL 4 · INTERACTIVE MAP
-  ════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════
+       PANEL 4 · MAPA INTERACTIVO
+  ══════════════════════════════════════════ -->
   <section class="panel panel-mapa" id="panel-3">
+
     <div class="map-ui">
+
       <div class="map-header-bar">
         <h2 class="map-title">Mapa de Centros Clandestinos</h2>
         <div class="map-controls">
-          <!-- Tile selector -->
           <div class="tile-control">
-            <label for="tile-select">Estilo de mapa</label>
+            <label for="tile-select">Estilo</label>
             <select id="tile-select">
               <option value="dark">Oscuro</option>
               <option value="satellite">Satélite</option>
-              <option value="topo">Topográfico</option>
-              <option value="streets">Calles</option>
             </select>
           </div>
         </div>
       </div>
 
-      <!-- Legend -->
+      <!-- Botón volver al inicio -->
+      <button class="btn-back-home" id="btn-back-home" aria-label="Volver al inicio">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15">
+          <path d="M3 12L12 3L21 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 10V20H10V15H14V20H19V10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Volver al inicio
+      </button>
+
       <div class="map-legend" id="map-legend"></div>
+
     </div>
 
     <div id="mapa-interactivo"></div>
   </section>
 
-  <!-- ═══════════════════════════════════════════
-       ARROW NAV
-  ════════════════════════════════════════════ -->
-  <button class="nav-arrow" id="nav-arrow" aria-label="Ir a la siguiente sección">
+  <!-- ══════════════════════════════════════════
+       FLECHA DE NAVEGACIÓN
+  ══════════════════════════════════════════ -->
+  <button class="nav-arrow" id="nav-arrow" aria-label="Siguiente sección">
     <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="16" y1="4" x2="16" y2="26" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-      <polyline points="8,19 16,27 24,19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <polyline points="8,19 16,27 24,19" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
   </button>
 
