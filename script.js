@@ -305,6 +305,7 @@ return PROV_DATA[name]||"";
 function buildTreemap(){
 
 const container=document.getElementById('treemap-container');
+
 const W=container.clientWidth||600;
 const H=container.clientHeight||180;
 
@@ -314,55 +315,120 @@ const root=d3.hierarchy(TREEMAP_DATA)
 
 d3.treemap()
 .size([W,H])
-.paddingOuter(3)
-.paddingInner(3)(root);
+.paddingOuter(4)
+.paddingInner(4)
+.round(true)(root);
 
 const svg=d3.select('#treemap-container')
 .append('svg')
 .attr('viewBox',`0 0 ${W} ${H}`);
+
+const tooltip=d3.select("body")
+.append("div")
+.style("position","absolute")
+.style("background","#0b1e1e")
+.style("color","#ffffff")
+.style("padding","10px 12px")
+.style("border-radius","6px")
+.style("font-size","13px")
+.style("pointer-events","none")
+.style("opacity",0)
+.style("box-shadow","0 6px 18px rgba(0,0,0,0.35)");
 
 const cell=svg.selectAll('g')
 .data(root.leaves())
 .enter()
 .append('g')
 .attr('transform',d=>`translate(${d.x0},${d.y0})`)
-.on("mouseover",function(){
-d3.select(this)
+.style("cursor","pointer");
+
+const rect=cell.append('rect')
+.attr('width',0)
+.attr('height',0)
+.attr('fill',d=>d.data.color)
+.attr('rx',4)
+.attr('ry',4)
 .transition()
-.duration(200)
-.attr("transform",d=>`translate(${d.x0},${d.y0}) scale(1.05)`);
+.duration(800)
+.attr('width',d=>d.x1-d.x0)
+.attr('height',d=>d.y1-d.y0);
+
+cell
+.on("mouseover",function(event,d){
+
+const percent=Math.round(d.data.value/807*100);
+
+d3.select(this)
+.raise()
+.transition()
+.duration(180)
+.attr("transform",`translate(${d.x0-2},${d.y0-2}) scale(1.04)`);
+
+tooltip
+.transition()
+.duration(120)
+.style("opacity",1);
+
+tooltip.html(
+`<strong>${d.data.name}</strong><br>
+${d.data.value} centros<br>
+${percent} %`
+);
+
 })
-.on("mouseout",function(){
+.on("mousemove",function(event){
+
+tooltip
+.style("left",(event.pageX+14)+"px")
+.style("top",(event.pageY-18)+"px");
+
+})
+.on("mouseout",function(event,d){
+
 d3.select(this)
 .transition()
+.duration(180)
+.attr("transform",`translate(${d.x0},${d.y0}) scale(1)`);
+
+tooltip
+.transition()
 .duration(200)
-.attr("transform",d=>`translate(${d.x0},${d.y0}) scale(1)`);
+.style("opacity",0);
+
 });
 
-cell.append('rect')
-.attr('width',d=>d.x1-d.x0)
-.attr('height',d=>d.y1-d.y0)
-.attr('fill',d=>d.data.color);
+
+/* % GRANDE */
 
 cell.append('text')
 .attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2-12)
+.attr('y',d=>(d.y1-d.y0)/2-14)
 .attr('text-anchor','middle')
-.style('font-size','26px')
+.style('font-size','30px')
 .style('font-weight','700')
+.style('fill','#ffffff')
 .text(d=>Math.round(d.data.value/807*100)+'%');
 
-cell.append('text')
-.attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2+6)
-.attr('text-anchor','middle')
-.text(d=>d.data.short);
+
+/* NOMBRE */
 
 cell.append('text')
 .attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2+24)
+.attr('y',d=>(d.y1-d.y0)/2+8)
+.attr('text-anchor','middle')
+.style('font-size','13px')
+.style('fill','#ffffff')
+.text(d=>d.data.short);
+
+
+/* CANTIDAD */
+
+cell.append('text')
+.attr('x',d=>(d.x1-d.x0)/2)
+.attr('y',d=>(d.y1-d.y0)/2+26)
 .attr('text-anchor','middle')
 .style('font-size','14px')
+.style('fill','#ffffff')
 .text(d=>d.data.value);
 
 }
