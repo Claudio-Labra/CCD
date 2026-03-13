@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Centros Clandestinos de Detención · Argentina</title>
-
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+ 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
-
+ 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+ 
   <!-- ══════════════════════════════════════════
        PANEL 1 · INTRO
   ══════════════════════════════════════════ -->
@@ -31,7 +31,7 @@
       <div class="intro-rule"></div>
     </div>
   </section>
-
+ 
   <!-- ══════════════════════════════════════════
        PANEL 2 · RUVTE
   ══════════════════════════════════════════ -->
@@ -56,41 +56,41 @@
         </p>
         <div class="ruvte-stat-row">
           <div class="ruvte-stat">
-            <span class="ruvte-stat-num">8.753</span>
+            <span class="ruvte-stat-num" id="ruvte-n1">0</span>
             <span class="ruvte-stat-label">Víctimas identificadas</span>
           </div>
           <div class="ruvte-stat">
-            <span class="ruvte-stat-num">807</span>
+            <span class="ruvte-stat-num" id="ruvte-n2">0</span>
             <span class="ruvte-stat-label">Centros clandestinos</span>
           </div>
           <div class="ruvte-stat">
-            <span class="ruvte-stat-num">30.000</span>
+            <span class="ruvte-stat-num" id="ruvte-n3">0</span>
             <span class="ruvte-stat-label">Detenidos-desaparecidos</span>
           </div>
         </div>
       </div>
     </div>
   </section>
-
+ 
   <!-- ══════════════════════════════════════════
        PANEL 3 · INFOGRAFÍA
        DOS COLUMNAS: mapa D3 izq | stats der
   ══════════════════════════════════════════ -->
   <section class="panel panel-infographic" id="panel-2">
     <div class="noise-overlay"></div>
-
+ 
     <div class="info-layout">
-
+ 
       <!-- COLUMNA IZQUIERDA: mapa D3 coroplético -->
       <div class="info-col-map">
         <svg id="choropleth-svg"></svg>
         <!-- Tooltip -->
         <div id="map-tooltip" class="map-tooltip"></div>
       </div>
-
+ 
       <!-- COLUMNA DERECHA: título + texto + treemap -->
       <div class="info-col-content">
-
+ 
         <div class="info-header">
           <h2 class="info-main-heading">
             Centros Clandestinos de<br>Detención en todo el país
@@ -100,7 +100,7 @@
             <span id="contador-807" class="mega-counter">0</span>
           </div>
         </div>
-
+ 
         <div class="info-texts">
           <p class="info-text">
             A días de cumplirse el quincuagésimo aniversario de la dictadura cívico-militar
@@ -120,16 +120,16 @@
             clandestinos de detención y tortura que existieron a lo largo y ancho del país.
           </p>
         </div>
-
+ 
         <div class="treemap-section">
           <div id="treemap-container"></div>
           <p class="chart-caption">CCD por dependencia</p>
         </div>
-
+ 
       </div>
     </div>
   </section>
-
+ 
   <!-- ══════════════════════════════════════════
        PANEL 4 · MAPA INTERACTIVO
   ══════════════════════════════════════════ -->
@@ -147,7 +147,7 @@
           </div>
         </div>
       </div>
-
+ 
       <button class="btn-back-home" id="btn-back-home" aria-label="Volver al inicio">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15">
           <path d="M3 12L12 3L21 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -155,13 +155,13 @@
         </svg>
         Volver al inicio
       </button>
-
+ 
       <div class="map-legend" id="map-legend"></div>
     </div>
-
+ 
     <div id="mapa-interactivo"></div>
   </section>
-
+ 
   <!-- FLECHA NAV -->
   <button class="nav-arrow" id="nav-arrow" aria-label="Siguiente sección">
     <svg viewBox="0 0 32 32" fill="none">
@@ -170,7 +170,7 @@
                 stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
   </button>
-
+ 
   <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/countup.js@2.8.0/dist/countUp.umd.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
