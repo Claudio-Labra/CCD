@@ -293,7 +293,7 @@ body {
 .provincia-num {
   font-family: var(--font);
   font-weight: 700;
-  fill: rgba(0, 0, 0, 0.65);
+  fill: #ffffff;
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
