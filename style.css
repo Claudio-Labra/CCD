@@ -173,7 +173,7 @@ body {
 }
 
 .question-glyph {
-  font-size: clamp(80px, 12vw, 140px);
+  font-size: clamp(80px, 12vw, 180px);
   font-weight: 900;
   line-height: 1;
   color: var(--teal);
@@ -400,7 +400,7 @@ body {
 }
 
 .info-text {
-  font-size: clamp(18px, 1vw, 25px);
+  font-size: clamp(16px, 1vw, 20px);
   font-weight: 300;
   line-height: 1.72;
   color: rgba(240,238,234,0.68);
