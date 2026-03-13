@@ -6,7 +6,7 @@
 const TILES = {
   dark: {
     url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attr: '&copy; <a href="https://carto.com/">CARTO</a>'
+    attr: '&copy; CARTO'
   },
   satellite: {
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -17,6 +17,7 @@ const TILES = {
 /* ─────────────────────────────────────────────────────────
    CCDs POR PROVINCIA
 ───────────────────────────────────────────────────────── */
+
 const PROV_DATA = {
   "Buenos Aires":259,
   "Ciudad Autónoma de Buenos Aires":62,
@@ -44,34 +45,53 @@ const PROV_DATA = {
   "Tierra del Fuego":1
 };
 
+/* ─────────────────────────────────────────────────────────
+   COLORES PROVINCIALES
+───────────────────────────────────────────────────────── */
+
+const PROV_COLORS = {
+"Buenos Aires":"#0d5560",
+"Catamarca":"#bee7ed",
+"Chaco":"#6abeca",
+"Chubut":"#bee7ed",
+"Córdoba":"#2c747f",
+"Corrientes":"#3996a4",
+"Entre Ríos":"#3996a4",
+"Formosa":"#6abeca",
+"Jujuy":"#3996a4",
+"La Pampa":"#6abeca",
+"La Rioja":"#6abeca",
+"Mendoza":"#2c747f",
+"Misiones":"#3996a4",
+"Neuquén":"#6abeca",
+"Río Negro":"#6abeca",
+"Salta":"#6abeca",
+"San Juan":"#6abeca",
+"San Luis":"#6abeca",
+"Santa Cruz":"#bee7ed",
+"Santa Fe":"#2c747f",
+"Santiago del Estero":"#6abeca",
+"Tierra del Fuego":"#bee7ed",
+"Tucumán":"#2c747f",
+"Ciudad Autónoma de Buenos Aires":"#0d5d60"
+};
+
 const GEOJSON_URL = 'argentina.geojson';
 
 /* ─────────────────────────────────────────────────────────
    TREEMAP DATA
 ───────────────────────────────────────────────────────── */
-const TREEMAP_DATA = {
-  name: 'root',
-  children: [
-    { name:'Fuerza de Seguridad Provincial',short:'F.S. Provincial',value:437,color:'#0a7a7a'},
-    { name:'Fuerza de Seguridad Federal',short:'F.S. Federal',value:125,color:'#0db8b8'},
-    { name:'Otros',short:'Otros',value:108,color:'#1e3a3a'},
-    { name:'Ejército',short:'Ejército',value:105,color:'#1adada'},
-    { name:'Armada',short:'Arm.',value:17,color:'#3a7fd5'},
-    { name:'Fuerza Aérea',short:'F.A.',value:15,color:'#55aaee'}
-  ]
-};
 
-/* ─────────────────────────────────────────────────────────
-   COLORES MARCADORES
-───────────────────────────────────────────────────────── */
-const DEP_COLORS = {
-  provincial:'#0a7a7a',
-  federal:'#0db8b8',
-  ejercito:'#1adada',
-  armada:'#3a7fd5',
-  aerea:'#55aaee',
-  otros:'#1e4a4a',
-  default:'#444455'
+const TREEMAP_DATA = {
+  name:'root',
+  children:[
+    {name:'Fuerza de Seguridad Provincial',short:'F.S. Provincial',value:437,color:'#0a7a7a'},
+    {name:'Fuerza de Seguridad Federal',short:'F.S. Federal',value:125,color:'#0db8b8'},
+    {name:'Otros',short:'Otros',value:108,color:'#1e3a3a'},
+    {name:'Ejército',short:'Ejército',value:105,color:'#1adada'},
+    {name:'Armada',short:'Arm.',value:17,color:'#3a7fd5'},
+    {name:'Fuerza Aérea',short:'F.A.',value:15,color:'#55aaee'}
+  ]
 };
 
 /* ═══════════════════════════════════════════════════════════
@@ -81,39 +101,37 @@ const DEP_COLORS = {
 const panels = Array.from(document.querySelectorAll('.panel'));
 const arrow = document.getElementById('nav-arrow');
 
-let current=0;
-let isAnimating=false;
+let current = 0;
+let isAnimating = false;
 
 function showPanel(index){
 
   if(isAnimating) return;
-  isAnimating=true;
+  isAnimating = true;
 
   panels.forEach((p,i)=>{
     p.classList.remove('active','above');
-    if(i<index) p.classList.add('above');
-    if(i===index) p.classList.add('active');
+    if(i < index) p.classList.add('above');
+    if(i === index) p.classList.add('active');
   });
 
-  arrow.classList.toggle('hidden',index===panels.length-1);
+  arrow.classList.toggle('hidden',index === panels.length-1);
 
-  if(index===1) initPanel2();
-  if(index===2) initPanel3();
-  if(index===3) initPanel4();
+  if(index === 1) initPanel2();
+  if(index === 2) initPanel3();
+  if(index === 3) initPanel4();
 
-  setTimeout(()=>{isAnimating=false},960);
+  setTimeout(()=>{isAnimating=false},900);
 }
 
-function nextPanel(){ if(current<panels.length-1){current++;showPanel(current)}}
-function prevPanel(){ if(current>0){current--;showPanel(current)}}
-function goHome(){current=0;showPanel(0)}
+function nextPanel(){ if(current < panels.length-1){current++;showPanel(current)} }
+function prevPanel(){ if(current > 0){current--;showPanel(current)} }
 
 arrow.addEventListener('click',nextPanel);
-document.getElementById('btn-back-home').addEventListener('click',goHome);
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowDown'||e.key==='PageDown') nextPanel();
-  if(e.key==='ArrowUp'||e.key==='PageUp') prevPanel();
+  if(e.key === 'ArrowDown') nextPanel();
+  if(e.key === 'ArrowUp') prevPanel();
 });
 
 showPanel(0);
@@ -122,12 +140,12 @@ showPanel(0);
    PANEL 2
 ══════════════════════════════════════════════════════════ */
 
-let panel2Init=false;
+let panel2Init = false;
 
 function initPanel2(){
 
   if(panel2Init) return;
-  panel2Init=true;
+  panel2Init = true;
 
   const opts={
     duration:2.5,
@@ -146,19 +164,19 @@ function initPanel2(){
    PANEL 3
 ══════════════════════════════════════════════════════════ */
 
-let panel3Init=false;
+let panel3Init = false;
 
 function initPanel3(){
 
   if(panel3Init) return;
-  panel3Init=true;
+  panel3Init = true;
 
   new countUp.CountUp('contador-807',807,{
     duration:2.8,
     useGrouping:false
   }).start();
 
-  setTimeout(buildChoropleth,950);
+  setTimeout(buildChoropleth,900);
   setTimeout(buildTreemap,350);
 }
 
@@ -173,22 +191,15 @@ function buildChoropleth(){
 
   const colMap=svgContainer.closest('.info-col-map');
 
-  const W=colMap.clientWidth;
-  const H=colMap.clientHeight;
+  const W = colMap.clientWidth;
+  const H = colMap.clientHeight;
 
   svgContainer.innerHTML='';
 
   const svg=d3.select(svgContainer)
   .attr('width',W)
   .attr('height',H)
-  .attr('viewBox',`0 0 ${W} ${H}`)
-  .attr('preserveAspectRatio','xMidYMid meet');
-
-  const maxVal=d3.max(Object.values(PROV_DATA));
-
-  const colorScale=d3.scaleSequential()
-  .domain([0,maxVal])
-  .interpolator(d3.interpolate('#0d2e2e','#0ee8e8'));
+  .attr('viewBox',`0 0 ${W} ${H}`);
 
   fetch(GEOJSON_URL)
   .then(r=>r.json())
@@ -206,9 +217,8 @@ function buildChoropleth(){
     .attr('class','provincia-path')
     .attr('d',path)
     .attr('fill',d=>{
-      const name=d.properties.name||d.properties.nombre;
-      const val=lookupProvince(name);
-      return val?colorScale(val):'#1a1a1a'
+      const name=d.properties.name || d.properties.nombre;
+      return PROV_COLORS[name] || '#222';
     });
 
     svg.selectAll('text')
@@ -218,44 +228,19 @@ function buildChoropleth(){
     .attr('class','provincia-num')
     .attr('transform',d=>{
       const [x,y]=path.centroid(d);
-      return `translate(${x},${y})`
+      return `translate(${x},${y})`;
     })
     .text(d=>{
-      const name=d.properties.name||d.properties.nombre;
-      const val=lookupProvince(name);
-      return val?val:''
+      const name=d.properties.name || d.properties.nombre;
+      return PROV_DATA[name] || '';
     });
 
   });
+
 }
-
-/* lookup */
-
-function normalizeStr(s){
-  return s.normalize('NFD')
-  .replace(/[\u0300-\u036f]/g,'')
-  .toLowerCase()
-}
-
-function lookupProvince(name){
-
-  if(PROV_DATA[name]!==undefined) return PROV_DATA[name]
-
-  const gn=normalizeStr(name)
-
-  for(const [k,v] of Object.entries(PROV_DATA)){
-    if(normalizeStr(k)===gn) return v
-  }
-
-  return null
-}
-
-/* resize fix */
 
 window.addEventListener('resize',()=>{
-  if(panel3Init){
-    setTimeout(buildChoropleth,200)
-  }
+  if(panel3Init) setTimeout(buildChoropleth,200);
 });
 
 /* ─────────────────────────────────────────────────────────
@@ -266,90 +251,102 @@ function buildTreemap(){
 
   const container=document.getElementById('treemap-container');
 
-  const W=container.clientWidth||600
-  const H=container.clientHeight||180
+  const W=container.clientWidth || 600;
+  const H=container.clientHeight || 180;
+
+  container.innerHTML='';
 
   const root=d3.hierarchy(TREEMAP_DATA)
   .sum(d=>d.value)
-  .sort((a,b)=>b.value-a.value)
+  .sort((a,b)=>b.value-a.value);
 
   d3.treemap()
   .size([W,H])
   .paddingOuter(2)
-  .paddingInner(2)(root)
+  .paddingInner(2)
+  .round(true)(root);
 
   const svg=d3.select('#treemap-container')
   .append('svg')
-  .attr('viewBox',`0 0 ${W} ${H}`)
+  .attr('viewBox',`0 0 ${W} ${H}`);
 
   const cell=svg.selectAll('g')
   .data(root.leaves())
   .enter()
   .append('g')
-  .attr('transform',d=>`translate(${d.x0},${d.y0})`)
+  .attr('transform',d=>`translate(${d.x0},${d.y0})`);
 
   cell.append('rect')
   .attr('width',d=>d.x1-d.x0)
   .attr('height',d=>d.y1-d.y0)
-  .attr('fill',d=>d.data.color)
+  .attr('fill',d=>d.data.color);
+
+  cell.append('text')
+  .attr('x',d=>(d.x1-d.x0)/2)
+  .attr('y',d=>(d.y1-d.y0)/2 - 6)
+  .attr('text-anchor','middle')
+  .attr('fill','#ffffff')
+  .attr('font-size','18px')
+  .text(d=>Math.round(d.data.value/807*100)+'%');
+
+  cell.append('text')
+  .attr('x',d=>(d.x1-d.x0)/2)
+  .attr('y',d=>(d.y1-d.y0)/2 + 12)
+  .attr('text-anchor','middle')
+  .attr('fill','#ffffff')
+  .attr('font-size','11px')
+  .text(d=>d.data.short);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PANEL 4 MAPA LEAFLET
+   PANEL 4 (Leaflet)
 ══════════════════════════════════════════════════════════ */
 
-let panel4Init=false
-let leafletMap
-let tileLayer
-let cluster
+let panel4Init=false;
+let leafletMap;
+let cluster;
 
 function initPanel4(){
 
-  if(panel4Init) return
-  panel4Init=true
+  if(panel4Init) return;
+  panel4Init=true;
 
   leafletMap=L.map('mapa-interactivo',{
     center:[-38,-63],
     zoom:5
-  })
+  });
 
-  setTile('dark')
+  L.tileLayer(TILES.dark.url,{
+    attribution:TILES.dark.attr
+  }).addTo(leafletMap);
 
-  cluster=L.markerClusterGroup()
-  leafletMap.addLayer(cluster)
+  cluster=L.markerClusterGroup();
+  leafletMap.addLayer(cluster);
 
   Papa.parse('data.csv',{
     download:true,
     header:true,
     complete:res=>buildMapMarkers(res.data)
-  })
-}
+  });
 
-function setTile(key){
-
-  const cfg=TILES[key]
-
-  if(tileLayer) leafletMap.removeLayer(tileLayer)
-
-  tileLayer=L.tileLayer(cfg.url,{attribution:cfg.attr})
-  tileLayer.addTo(leafletMap)
 }
 
 function buildMapMarkers(data){
 
   data.forEach(row=>{
 
-    const lat=parseFloat(row.LATITUD)
-    const lon=parseFloat(row.LONGITUD)
+    const lat=parseFloat(row.LATITUD);
+    const lon=parseFloat(row.LONGITUD);
 
-    if(!lat||!lon) return
+    if(!lat || !lon) return;
 
     const marker=L.circleMarker([lat,lon],{
       radius:4,
       color:'#0db8b8'
-    })
+    });
 
-    cluster.addLayer(marker)
+    cluster.addLayer(marker);
 
-  })
+  });
+
 }
