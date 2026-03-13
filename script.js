@@ -187,8 +187,8 @@ function initPanel3() {
   });
   setTimeout(() => cu.start(), 200);
  
-  /* D3 choropleth */
-  buildChoropleth();
+  /* D3 choropleth — esperar fin de transicion CSS (900ms) */
+  setTimeout(buildChoropleth, 950);
  
   /* Treemap */
   setTimeout(buildTreemap, 350);
@@ -201,10 +201,15 @@ function initPanel3() {
 function buildChoropleth() {
   const container = document.getElementById('choropleth-svg');
   if (!container) return;
- 
-  const W = container.clientWidth  || 500;
-  const H = container.clientHeight || window.innerHeight;
- 
+
+  /* El panel usa CSS fixed + transition: clientWidth puede ser 0 durante la animacion.
+     Calculamos desde el viewport: la columna del mapa ocupa 51% del ancho. */
+  const colMapEl = container.closest('.info-col-map');
+  const W = (colMapEl && colMapEl.offsetWidth > 10)
+            ? colMapEl.offsetWidth
+            : Math.round(window.innerWidth * 0.51);
+  const H = window.innerHeight;
+
   const svg = d3.select('#choropleth-svg')
     .attr('viewBox', `0 0 ${W} ${H}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
@@ -336,12 +341,19 @@ function lookupProvince(geoName) {
     if (gn.includes(kn))            return val;
   }
  
-  /* Special aliases */
+  /* Special aliases — cubre nombres sin tildes del GeoJSON y variantes */
   const aliases = {
     'tierra del fuego, antartida e islas del atlantico sur': 'Tierra del Fuego',
+    'tierra del fuego': 'Tierra del Fuego',
     'ciudad de buenos aires': 'Ciudad Autónoma de Buenos Aires',
+    'ciudad autonoma de buenos aires': 'Ciudad Autónoma de Buenos Aires',
     'caba': 'Ciudad Autónoma de Buenos Aires',
-    'gba': 'Buenos Aires'
+    'gba': 'Buenos Aires',
+    'tucuman': 'Tucumán',
+    'cordoba': 'Córdoba',
+    'neuquen': 'Neuquén',
+    'entre rios': 'Entre Ríos',
+    'rio negro': 'Río Negro'
   };
   const alias = aliases[gn];
   if (alias && PROV_DATA[alias] !== undefined) return PROV_DATA[alias];
