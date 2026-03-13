@@ -47,7 +47,7 @@ const PROV_DATA = {
  
 /* GeoJSON con límites provinciales argentinos */
 const GEOJSON_URL =
-  'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/argentina.geojson';
+  'argentina.geojson';
  
 /* ─────────────────────────────────────────────────────────
    TREEMAP DATA
