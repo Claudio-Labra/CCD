@@ -188,7 +188,7 @@ function initPanel3() {
   setTimeout(() => cu.start(), 200);
  
   /* D3 choropleth */
-  setTimeout(buildChoropleth, 200);
+  buildChoropleth();
  
   /* Treemap */
   setTimeout(buildTreemap, 350);
@@ -202,8 +202,8 @@ function buildChoropleth() {
   const container = document.getElementById('choropleth-svg');
   if (!container) return;
  
-  const W = container.parentElement.clientWidth;
-  const H = container.parentElement.clientHeight;
+  const W = container.clientWidth  || 500;
+  const H = container.clientHeight || window.innerHeight;
  
   const svg = d3.select('#choropleth-svg')
     .attr('viewBox', `0 0 ${W} ${H}`)
