@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
 }
-
+ 
 :root {
   --bg:        #0c0c0c;
   --bg-mid:    #111111;
@@ -18,9 +18,9 @@
   --border:    rgba(255,255,255,0.08);
   --font:      'Outfit', sans-serif;
 }
-
+ 
 html { overflow: hidden; }
-
+ 
 body {
   font-family: var(--font);
   background: var(--bg);
@@ -29,7 +29,7 @@ body {
   height: 100vh;
   width: 100vw;
 }
-
+ 
 .noise-overlay {
   position: absolute;
   inset: 0;
@@ -39,7 +39,7 @@ body {
   opacity: 0.6;
   z-index: 1;
 }
-
+ 
 /* ============================================================
    PANEL SYSTEM
    ============================================================ */
@@ -58,20 +58,20 @@ body {
               opacity   0.9s cubic-bezier(0.77, 0, 0.175, 1);
   pointer-events: none;
 }
-
+ 
 .panel.active {
   opacity: 1;
   transform: translateY(0);
   pointer-events: all;
   z-index: 10;
 }
-
+ 
 .panel.above {
   opacity: 0;
   transform: translateY(-100vh);
 }
-
-
+ 
+ 
 /* ============================================================
    PANEL 1 · INTRO
    ============================================================ */
@@ -81,7 +81,7 @@ body {
   text-align: center;
   padding: 40px;
 }
-
+ 
 .panel-intro::before {
   content: '';
   position: absolute;
@@ -89,7 +89,7 @@ body {
   background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(13,184,184,0.06) 0%, transparent 70%);
   pointer-events: none;
 }
-
+ 
 .intro-inner {
   position: relative;
   z-index: 2;
@@ -99,12 +99,12 @@ body {
   gap: 24px;
   animation: fadeUp 1.2s cubic-bezier(0.22,1,0.36,1) both;
 }
-
+ 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
+ 
 .intro-eyebrow {
   font-size: clamp(10px, 1.1vw, 13px);
   font-weight: 300;
@@ -112,7 +112,7 @@ body {
   color: var(--teal);
   text-transform: uppercase;
 }
-
+ 
 .intro-heading {
   font-size: clamp(36px, 6.5vw, 88px);
   font-weight: 800;
@@ -120,7 +120,7 @@ body {
   letter-spacing: -0.03em;
   color: var(--white);
 }
-
+ 
 .intro-sub {
   font-size: clamp(14px, 1.6vw, 20px);
   font-weight: 300;
@@ -128,15 +128,15 @@ body {
   letter-spacing: 0.04em;
   max-width: 600px;
 }
-
+ 
 .intro-rule {
   width: 80px;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--teal), transparent);
   border-radius: 2px;
 }
-
-
+ 
+ 
 /* ============================================================
    PANEL 2 · RUVTE
    ============================================================ */
@@ -144,7 +144,7 @@ body {
   background: var(--bg-mid);
   padding: 60px 40px;
 }
-
+ 
 .panel-ruvte::before {
   content: '';
   position: absolute;
@@ -153,7 +153,7 @@ body {
   background: radial-gradient(circle, rgba(13,184,184,0.07) 0%, transparent 70%);
   pointer-events: none;
 }
-
+ 
 .ruvte-inner {
   position: relative;
   z-index: 2;
@@ -164,14 +164,14 @@ body {
   gap: 80px;
   align-items: start;
 }
-
+ 
 .ruvte-question {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding-top: 8px;
 }
-
+ 
 .question-glyph {
   font-size: clamp(80px, 12vw, 180px);
   font-weight: 900;
@@ -180,32 +180,32 @@ body {
   opacity: 0.25;
   display: block;
 }
-
+ 
 .ruvte-question h2 {
-  font-size: clamp(24px, 3vw, 40px);
+  font-size: clamp(29px, 3.6vw, 48px);
   font-weight: 700;
   line-height: 1.2;
   color: var(--white);
 }
-
+ 
 .ruvte-body {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
-
+ 
 .ruvte-body p {
   font-size: clamp(16px, 1.2vw, 18px);
   font-weight: 300;
   line-height: 1.75;
   color: rgba(240,238,234,0.75);
 }
-
+ 
 .ruvte-body strong {
   font-weight: 600;
   color: var(--teal-lt);
 }
-
+ 
 .ruvte-stat-row {
   display: flex;
   gap: 40px;
@@ -216,20 +216,20 @@ body {
   border-radius: 2px;
   margin-top: 12px;
 }
-
+ 
 .ruvte-stat {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
+ 
 .ruvte-stat-num {
   font-size: clamp(22px, 2.8vw, 36px);
   font-weight: 800;
   color: var(--teal-lt);
   letter-spacing: -0.02em;
 }
-
+ 
 .ruvte-stat-label {
   font-size: 11px;
   font-weight: 400;
@@ -237,8 +237,8 @@ body {
   letter-spacing: 0.1em;
   color: var(--muted);
 }
-
-
+ 
+ 
 /* ============================================================
    PANEL 3 · INFOGRAFÍA DOS COLUMNAS
    ============================================================ */
@@ -248,16 +248,16 @@ body {
   align-items: stretch;
   justify-content: stretch;
 }
-
+ 
 .info-layout {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 42% 58%;
+  grid-template-columns: 51% 49%;
   width: 100%;
   height: 100vh;
 }
-
+ 
 /* ── Columna izquierda: mapa D3 ── */
 .info-col-map {
   position: relative;
@@ -269,13 +269,13 @@ body {
   border-right: 1px solid var(--border);
   overflow: hidden;
 }
-
+ 
 #choropleth-svg {
   width: 100%;
   height: 100%;
   display: block;
 }
-
+ 
 /* Province paths */
 .provincia-path {
   stroke: #0c0c0c;
@@ -283,12 +283,12 @@ body {
   cursor: default;
   transition: opacity 0.18s, filter 0.18s;
 }
-
+ 
 .provincia-path:hover {
   opacity: 0.75;
   filter: brightness(1.25);
 }
-
+ 
 /* Number labels on provinces */
 .provincia-num {
   font-family: var(--font);
@@ -299,7 +299,7 @@ body {
   pointer-events: none;
   user-select: none;
 }
-
+ 
 /* Tooltip */
 .map-tooltip {
   position: absolute;
@@ -317,28 +317,28 @@ body {
   z-index: 100;
   backdrop-filter: blur(4px);
 }
-
+ 
 .map-tooltip.visible {
   opacity: 1;
 }
-
+ 
 .tooltip-name {
   font-weight: 600;
   color: var(--teal-lt);
   margin-bottom: 3px;
   font-size: 13px;
 }
-
+ 
 .tooltip-count {
   font-weight: 300;
   color: rgba(240,238,234,0.75);
 }
-
+ 
 .tooltip-count strong {
   font-weight: 700;
   color: var(--white);
 }
-
+ 
 /* ── Columna derecha ── */
 .info-col-content {
   display: flex;
@@ -348,7 +348,7 @@ body {
   height: 100%;
   overflow: hidden;
 }
-
+ 
 .info-header {
   display: flex;
   align-items: flex-start;
@@ -356,7 +356,7 @@ body {
   flex-wrap: nowrap;
   flex-shrink: 0;
 }
-
+ 
 .info-main-heading {
   font-size: clamp(30px, 2.2vw, 50px);
   font-weight: 900;
@@ -365,7 +365,7 @@ body {
   letter-spacing: -0.02em;
   flex-shrink: 0;
 }
-
+ 
 .info-counter-block {
   display: flex;
   align-items: center;
@@ -375,14 +375,14 @@ body {
   align-self: flex-start;
   padding-top: 2px;
 }
-
+ 
 .counter-divider {
   font-size: clamp(32px, 4vw, 58px);
   font-weight: 200;
   color: rgba(255,255,255,0.25);
   line-height: 1;
 }
-
+ 
 .mega-counter {
   font-size: clamp(52px, 7vw, 96px);
   font-weight: 900;
@@ -391,22 +391,23 @@ body {
   line-height: 0.9;
   display: inline-block;
 }
-
+ 
 .info-texts {
   display: flex;
   flex-direction: column;
   gap: 14px;
   flex-shrink: 0;
+  margin-top: 28px;
 }
-
+ 
 .info-text {
-  font-size: clamp(16px, 1vw, 20px);
+  font-size: clamp(16px, 1.2vw, 18px);
   font-weight: 300;
-  line-height: 1.72;
+  line-height: 1.75;
   color: rgba(240,238,234,0.68);
   text-align: justify;
 }
-
+ 
 .treemap-section {
   flex: 1;
   display: flex;
@@ -415,40 +416,46 @@ body {
   gap: 6px;
   min-height: 0;
 }
-
+ 
 #treemap-container {
   width: 100%;
   flex: 1;
   min-height: 120px;
   max-height: 210px;
 }
-
+ 
 #treemap-container svg {
   width: 100%;
   height: 100%;
   display: block;
 }
-
+ 
 .treemap-cell {
   cursor: default;
-  transition: opacity 0.15s;
 }
-.treemap-cell:hover { opacity: 0.78; }
-
+ 
+.treemap-cell-group {
+  transition: filter 0.18s ease;
+  cursor: default;
+}
+.treemap-cell-group:hover {
+  filter: brightness(1.15);
+}
+ 
 .treemap-label {
   font-family: var(--font);
   font-weight: 700;
   fill: rgba(255,255,255,0.95);
   pointer-events: none;
 }
-
+ 
 .treemap-sub {
   font-family: var(--font);
   font-weight: 300;
   fill: rgba(255,255,255,0.55);
   pointer-events: none;
 }
-
+ 
 .chart-caption {
   font-size: 10px;
   font-weight: 300;
@@ -456,8 +463,8 @@ body {
   letter-spacing: 0.18em;
   color: var(--muted);
 }
-
-
+ 
+ 
 /* ============================================================
    PANEL 4 · MAPA INTERACTIVO
    ============================================================ */
@@ -468,7 +475,7 @@ body {
   align-items: stretch;
   justify-content: flex-start;
 }
-
+ 
 .map-ui {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -481,29 +488,29 @@ body {
   pointer-events: none;
   gap: 16px;
 }
-
+ 
 .map-header-bar {
   display: flex;
   flex-direction: column;
   gap: 8px;
   pointer-events: all;
 }
-
+ 
 .map-title {
   font-size: clamp(14px, 1.8vw, 22px);
   font-weight: 700;
   color: var(--white);
   letter-spacing: -0.01em;
 }
-
+ 
 .map-controls { pointer-events: all; }
-
+ 
 .tile-control {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
+ 
 .tile-control label {
   font-size: 11px;
   font-weight: 300;
@@ -511,7 +518,7 @@ body {
   letter-spacing: 0.12em;
   color: var(--muted);
 }
-
+ 
 #tile-select {
   appearance: none;
   background: var(--bg-card);
@@ -531,7 +538,7 @@ body {
 #tile-select:hover  { border-color: var(--teal); }
 #tile-select:focus  { outline: none; border-color: var(--teal); }
 #tile-select option { background: #1a1a1a; }
-
+ 
 .btn-back-home {
   pointer-events: all;
   display: flex;
@@ -556,7 +563,7 @@ body {
   background: rgba(13,184,184,0.1);
   color: var(--teal-lt);
 }
-
+ 
 .map-legend {
   display: flex;
   flex-direction: column;
@@ -569,7 +576,7 @@ body {
   min-width: 200px;
   margin-top: 4px;
 }
-
+ 
 .legend-title {
   font-size: 10px;
   font-weight: 600;
@@ -578,32 +585,32 @@ body {
   color: var(--muted);
   margin-bottom: 4px;
 }
-
+ 
 .legend-item {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
+ 
 .legend-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
 }
-
+ 
 .legend-label {
   font-size: 11px;
   font-weight: 300;
   color: rgba(240,238,234,0.8);
 }
-
+ 
 #mapa-interactivo {
   width: 100%;
   height: 100vh;
   z-index: 100;
 }
-
+ 
 .leaflet-popup-content-wrapper {
   background: #111;
   border: 1px solid rgba(13,184,184,0.3);
@@ -617,7 +624,7 @@ body {
   margin: 12px 16px;
 }
 .leaflet-popup-tip { background: #111; }
-
+ 
 .popup-nombre {
   font-weight: 600;
   font-size: 14px;
@@ -632,7 +639,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-
+ 
 .marker-cluster-small,
 .marker-cluster-medium,
 .marker-cluster-large {
@@ -646,8 +653,8 @@ body {
   font-weight: 700;
   color: #fff;
 }
-
-
+ 
+ 
 /* ============================================================
    NAV ARROW
    ============================================================ */
@@ -682,17 +689,17 @@ body {
   pointer-events: none;
 }
 .nav-arrow svg { width: 22px; height: 22px; }
-
+ 
 @keyframes arrowBounce {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50%       { transform: translateX(-50%) translateY(6px); }
 }
-
+ 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(13,184,184,0.2); border-radius: 2px; }
-
-
+ 
+ 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
