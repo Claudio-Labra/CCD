@@ -217,25 +217,25 @@ function buildChoropleth(){
 const container=document.getElementById('choropleth-svg');
 if(!container)return;
 
-const colMapEl=container.closest('.info-col-map');
-const W=(colMapEl&&colMapEl.offsetWidth>10)?colMapEl.offsetWidth:window.innerWidth*0.51;
+const W=container.clientWidth;
 const H=window.innerHeight;
 
 const svg=d3.select('#choropleth-svg')
 .attr('width',W)
-.attr('height',H)
-.attr('viewBox',`0 0 ${W} ${H}`);
+.attr('height',H);
 
 fetch(GEOJSON_URL)
 .then(r=>r.json())
 .then(geojson=>{
 
 const projection=d3.geoMercator()
-.fitExtent([[12,12],[W-12,H-12]],geojson);
+.fitSize([W,H],geojson);
 
 const path=d3.geoPath().projection(projection);
 
-svg.selectAll("path")
+const g=svg.append("g");
+
+const provincias=g.selectAll("path")
 .data(geojson.features)
 .enter()
 .append("path")
@@ -244,6 +244,38 @@ svg.selectAll("path")
 .attr("fill",d=>{
 const name=d.properties.name||d.properties.nombre;
 return PROV_COLORS[name]||"#1a1a1a";
+})
+.on("mouseover",function(event,d){
+
+const name=d.properties.name||d.properties.nombre;
+const val=PROV_DATA[name]||0;
+
+d3.select(this)
+.raise()
+.transition()
+.duration(200)
+.attr("transform",()=>{
+const c=path.centroid(d);
+return `translate(${c[0]},${c[1]}) scale(1.08) translate(${-c[0]},${-c[1]})`;
+})
+.attr("stroke","#ffffff")
+.attr("stroke-width",2);
+
+})
+.on("mouseout",function(){
+
+d3.select(this)
+.transition()
+.duration(200)
+.attr("transform","scale(1)")
+.attr("stroke","none");
+
+});
+
+provincias.append("title")
+.text(d=>{
+const name=d.properties.name||d.properties.nombre;
+return `${name} — ${PROV_DATA[name]||0}`;
 });
 
 svg.selectAll("text")
@@ -282,8 +314,8 @@ const root=d3.hierarchy(TREEMAP_DATA)
 
 d3.treemap()
 .size([W,H])
-.paddingOuter(2)
-.paddingInner(2)(root);
+.paddingOuter(3)
+.paddingInner(3)(root);
 
 const svg=d3.select('#treemap-container')
 .append('svg')
@@ -293,7 +325,19 @@ const cell=svg.selectAll('g')
 .data(root.leaves())
 .enter()
 .append('g')
-.attr('transform',d=>`translate(${d.x0},${d.y0})`);
+.attr('transform',d=>`translate(${d.x0},${d.y0})`)
+.on("mouseover",function(){
+d3.select(this)
+.transition()
+.duration(200)
+.attr("transform",d=>`translate(${d.x0},${d.y0}) scale(1.05)`);
+})
+.on("mouseout",function(){
+d3.select(this)
+.transition()
+.duration(200)
+.attr("transform",d=>`translate(${d.x0},${d.y0}) scale(1)`);
+});
 
 cell.append('rect')
 .attr('width',d=>d.x1-d.x0)
@@ -301,18 +345,25 @@ cell.append('rect')
 .attr('fill',d=>d.data.color);
 
 cell.append('text')
-.attr('class','treemap-label')
 .attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2-6)
+.attr('y',d=>(d.y1-d.y0)/2-12)
 .attr('text-anchor','middle')
+.style('font-size','26px')
+.style('font-weight','700')
 .text(d=>Math.round(d.data.value/807*100)+'%');
 
 cell.append('text')
-.attr('class','treemap-sub')
 .attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2+12)
+.attr('y',d=>(d.y1-d.y0)/2+6)
 .attr('text-anchor','middle')
 .text(d=>d.data.short);
+
+cell.append('text')
+.attr('x',d=>(d.x1-d.x0)/2)
+.attr('y',d=>(d.y1-d.y0)/2+24)
+.attr('text-anchor','middle')
+.style('font-size','14px')
+.text(d=>d.data.value);
 
 }
 
