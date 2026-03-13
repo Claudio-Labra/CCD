@@ -188,7 +188,7 @@ function initPanel3() {
   setTimeout(() => cu.start(), 200);
  
   /* D3 choropleth — esperar fin de transicion CSS (900ms) */
-  setTimeout(buildChoropleth, 950);
+  setTimeout(buildChoropleth, 1000);
  
   /* Treemap */
   setTimeout(buildTreemap, 350);
@@ -202,15 +202,17 @@ function buildChoropleth() {
   const container = document.getElementById('choropleth-svg');
   if (!container) return;
 
-  /* El panel usa CSS fixed + transition: clientWidth puede ser 0 durante la animacion.
-     Calculamos desde el viewport: la columna del mapa ocupa 51% del ancho. */
-  const colMapEl = container.closest('.info-col-map');
-  const W = (colMapEl && colMapEl.offsetWidth > 10)
-            ? colMapEl.offsetWidth
-            : Math.round(window.innerWidth * 0.51);
+  /* Calculamos desde el viewport — el panel es 100vw x 100vh fixed.
+     La columna del mapa ocupa 51% del ancho (grid: 51% 49%).
+     NO usamos clientWidth porque puede ser 0 durante la transicion CSS. */
+  const W = Math.floor(window.innerWidth  * 0.51);
   const H = window.innerHeight;
 
+  /* Seteamos width/height como atributos ademas del viewBox para que
+     el SVG no dependa solo del escalado CSS */
   const svg = d3.select('#choropleth-svg')
+    .attr('width',  W)
+    .attr('height', H)
     .attr('viewBox', `0 0 ${W} ${H}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
  
@@ -229,9 +231,16 @@ function buildChoropleth() {
     })
     .then(geojson => {
  
+      /* Filtrar features sin nombre (polígonos vacíos/continentales)
+         para que fitExtent calcule solo las provincias argentinas */
+      const validFeatures = geojson.features.filter(
+        f => f.properties && (f.properties.name || f.properties.nombre)
+      );
+      const argentinaFC = { type: 'FeatureCollection', features: validFeatures };
+
       /* Fit projection to container */
       const projection = d3.geoMercator()
-        .fitExtent([[12, 12], [W - 12, H - 12]], geojson);
+        .fitExtent([[12, 12], [W - 12, H - 12]], argentinaFC);
  
       const pathGen = d3.geoPath().projection(projection);
  
@@ -341,7 +350,7 @@ function lookupProvince(geoName) {
     if (gn.includes(kn))            return val;
   }
  
-  /* Special aliases — cubre nombres sin tildes del GeoJSON y variantes */
+  /* Special aliases — cubre nombres sin tildes del GeoJSON */
   const aliases = {
     'tierra del fuego, antartida e islas del atlantico sur': 'Tierra del Fuego',
     'tierra del fuego': 'Tierra del Fuego',
