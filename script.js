@@ -171,7 +171,7 @@ separator:'.',
 decimal:','
 };
 
-const cu1=new countUp.CountUp('ruvte-n1',8753,opts);
+const cu1=new countUp.CountUp('ruvte-n1',8631,opts);
 const cu2=new countUp.CountUp('ruvte-n2',807,{...opts,separator:''});
 const cu3=new countUp.CountUp('ruvte-n3',30000,opts);
 
