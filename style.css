@@ -172,11 +172,17 @@ body {
   border-radius:2px;
 }
 
-.ruvte-question {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: 8px;
+.ruvte-question{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.ruvte-question a{
+  color:inherit;
+  text-decoration:none;
 }
 
 .question-glyph {
