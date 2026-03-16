@@ -162,7 +162,7 @@ body {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 80px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .ruvte-image{
@@ -170,14 +170,16 @@ body {
   height:220px;
   object-fit:cover;
   border-radius:2px;
+  margin-bottom:20px;
 }
 
 .ruvte-question{
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
   text-align:center;
+  height:100%;
 }
 
 .question-glyph {
@@ -193,7 +195,7 @@ body {
   font-size: clamp(29px, 3.6vw, 48px);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--white);
+  color: var(--teal-lt);
 }
 
 .ruvte-body {
