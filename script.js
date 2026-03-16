@@ -250,6 +250,17 @@ return PROV_COLORS[name]||"#1a1a1a";
 const name=d.properties.name||d.properties.nombre;
 const val=PROV_DATA[name]||0;
 
+const tooltip=d3.select("#map-tooltip");
+
+tooltip
+.html(`<div class="tooltip-name">${name}</div>
+<div class="tooltip-count">${val} centros</div>`)
+.classed("visible",true);
+
+tooltip
+.style("left",(event.pageX+12)+"px")
+.style("top",(event.pageY-12)+"px");
+
 d3.select(this)
 .raise()
 .transition()
@@ -262,7 +273,17 @@ return `translate(${c[0]},${c[1]}) scale(1.08) translate(${-c[0]},${-c[1]})`;
 .attr("stroke-width",2);
 
 })
+.on("mousemove",function(event){
+
+d3.select("#map-tooltip")
+.style("left",(event.pageX+12)+"px")
+.style("top",(event.pageY-12)+"px");
+
+})
 .on("mouseout",function(){
+
+d3.select("#map-tooltip")
+.classed("visible",false);
 
 d3.select(this)
 .transition()
