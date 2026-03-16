@@ -96,13 +96,13 @@ children:[
 ───────────────────────────────────────────────────────── */
 
 const DEP_COLORS={
-provincial:'#0a7a7a',
-federal:'#0db8b8',
-ejercito:'#1adada',
-armada:'#3a7fd5',
-aerea:'#55aaee',
-otros:'#1e4a4a',
-default:'#444455'
+provincial:'#e63946',
+federal:'#457b9d',
+ejercito:'#2a9d8f',
+armada:'#f4a261',
+aerea:'#9b5de5',
+otros:'#6c757d',
+default:'#999999'
 };
 
 
@@ -306,7 +306,12 @@ svg.selectAll("text")
 .attr("class","provincia-num")
 .attr("fill","#ffffff")
 .attr("transform",d=>{
-const [x,y]=path.centroid(d);
+let [x,y]=path.centroid(d);
+
+if((d.properties.name||d.properties.nombre)==="Salta"){
+x+=15;
+y+=5;
+}
 return `translate(${x},${y})`;
 })
 .text(d=>{
