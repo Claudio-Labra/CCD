@@ -5,9 +5,7 @@
 
 ### ¿Por qué este trabajo?
 
-A días de cumplirse el quincuagésimo aniversario del golpe cívico-militar del 24 de marzo de 1976, este proyecto tiene por objetivo constituir un pequeño aporte a la comprensión de ese período histórico. Durante la última dictadura, el Estado argentino —con la anuencia de amplios sectores de la burguesía nacional y el clero— desplegó un plan sistemático de tortura y exterminio contra su propia población civil, con particular énfasis en los sectores obreros organizados.
-
-En un contexto en el que el actual gobierno impulsa un discurso plagado de tergiversaciones históricas y falsedades, con el único objetivo de reinstaurar la llamada *teoría de los dos demonios* —según la cual los militares habrían cometido meros "excesos" en el marco de una supuesta "guerra"—, esta cartografía del terror estatal busca visibilizar la organización, planificación y posterior despliegue de los numerosos centros clandestinos de detención y tortura que existieron a lo largo y ancho del país.
+A días de cumplirse el quincuagésimo aniversario del golpe cívico-militar del 24 de marzo de 1976, este proyecto tiene por objetivo constituir un pequeño aporte a la comprensión de ese período histórico. Durante la última dictadura, el Estado argentino —con la anuencia de amplios sectores de la burguesía nacional y el clero— desplegó un plan sistemático de tortura y exterminio contra su propia población civil, con particular énfasis sobre los sectores obreros organizados.
 
 El trabajo no pretende ser exhaustivo ni académico. Es un **ensayo breve**, realizado con herramientas de programación accesibles, que busca poner en forma visual una información que el Estado argentino ya tiene sistematizada pero que merece seguir circulando.
 
