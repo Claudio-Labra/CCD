@@ -180,11 +180,6 @@ body {
   text-align:center;
 }
 
-.ruvte-question a{
-  color:inherit;
-  text-decoration:none;
-}
-
 .question-glyph {
   font-size: clamp(80px, 12vw, 180px);
   font-weight: 900;
