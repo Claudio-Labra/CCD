@@ -107,4 +107,4 @@ Este trabajo es de libre uso y distribución con fines educativos, periodístico
 
 ---
 
-*"La memoria es una forma de resistencia."*
+*30.000 Compañeros detenidos desapareceidos, Presentes!*
