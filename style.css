@@ -167,19 +167,32 @@ body {
 
 .ruvte-image{
   width:100%;
-  height:220px;
+  height:100%;
   object-fit:cover;
   border-radius:2px;
-  margin-bottom:20px;
 }
 
 .ruvte-question{
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:flex-start;
   align-items:center;
   text-align:center;
   height:100%;
+  gap:20px;
+}
+
+.ruvte-question a{
+  color: var(--teal-lt);
+  text-decoration:none;
+}
+
+.ruvte-question a:visited{
+  color: var(--teal-lt);
+}
+
+.ruvte-question a:hover{
+  color: var(--teal-lt);
 }
 
 .question-glyph {
