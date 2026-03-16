@@ -107,4 +107,4 @@ Este trabajo es de libre uso y distribución con fines educativos, periodístico
 
 ---
 
-*30.000 Compañeros detenidos desapareceidos, Presentes!*
+*¡30.000 Compañerxs detenidxs desaparecidxs, presentes!*
