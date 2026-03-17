@@ -366,7 +366,7 @@ body {
 .info-col-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 44px 52px 36px 52px;
   height: 100%;
   overflow-y: auto;
@@ -421,8 +421,7 @@ body {
   flex-direction: column;
   gap: 14px;
   flex-shrink: 0;
-  margin-top: 28px;
-  margin-bottom: auto;
+  margin-top: 24px;
 }
 
 .info-text {
@@ -434,12 +433,14 @@ body {
 }
 
 .treemap-section {
-  flex: 0 0 auto;;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 6px;
   min-height: 0;
+  margin-top: auto;   /* absorbe todo el espacio libre → treemap siempre al fondo */
+  padding-top: 20px;
 }
 
 #treemap-container {
