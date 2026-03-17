@@ -421,7 +421,7 @@ body {
   flex-direction: column;
   gap: 14px;
   flex-shrink: 0;
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .info-text {
