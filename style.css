@@ -369,7 +369,7 @@ body {
   justify-content: space-between;
   padding: 44px 52px 36px 52px;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .info-header {
@@ -432,7 +432,7 @@ body {
 }
 
 .treemap-section {
-  flex: 1;
+  flex: 0 0 auto;;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
