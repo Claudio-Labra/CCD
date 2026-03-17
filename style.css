@@ -206,9 +206,9 @@ body {
 
 .ruvte-question h2 {
   font-size: clamp(29px, 3.6vw, 48px);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.2;
-  color: var(--teal-lt);
+  color: var(--white);
 }
 
 .ruvte-body {
