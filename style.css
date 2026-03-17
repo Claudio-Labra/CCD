@@ -731,10 +731,16 @@ body {
   .ruvte-stat-row { flex-direction: column; gap: 20px; }
   .info-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: 45vh 55vh;
+    grid-template-rows: 45vh auto;
   }
   .info-col-map { border-right: none; border-bottom: 1px solid var(--border); }
   .info-col-content { padding: 24px 20px; overflow-y: auto; }
   .info-header { flex-wrap: wrap; }
   .map-ui { flex-wrap: wrap; }
+   .treemap-section{
+    margin-top: 20px;
+  }
+  #treemap-container{
+    max-height: 180px;
+  }
 }
