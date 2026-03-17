@@ -428,9 +428,9 @@ tooltip
 
 cell.append('text')
 .attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2-14)
+.attr('y',d=>(d.y1-d.y0)/2-10)
 .attr('text-anchor','middle')
-.style('font-size','30px')
+.style('font-size','20px')
 .style('font-weight','700')
 .style('fill','#ffffff')
 .text(d=>Math.round(d.data.value/807*100)+'%');
@@ -440,9 +440,9 @@ cell.append('text')
 
 cell.append('text')
 .attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2+8)
+.attr('y',d=>(d.y1-d.y0)/2+6)
 .attr('text-anchor','middle')
-.style('font-size','13px')
+.style('font-size','9px')
 .style('fill','#ffffff')
 .text(d=>d.data.short);
 
@@ -451,9 +451,9 @@ cell.append('text')
 
 cell.append('text')
 .attr('x',d=>(d.x1-d.x0)/2)
-.attr('y',d=>(d.y1-d.y0)/2+26)
+.attr('y',d=>(d.y1-d.y0)/2+17)
 .attr('text-anchor','middle')
-.style('font-size','14px')
+.style('font-size','10px')
 .style('fill','#ffffff')
 .text(d=>d.data.value);
 
