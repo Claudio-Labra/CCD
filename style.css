@@ -429,7 +429,7 @@ body {
   font-weight: 300;
   line-height: 1.75;
   color: rgba(240,238,234,0.68);
-  text-align: justify;
+  text-align: left;
 }
 
 .treemap-section {
