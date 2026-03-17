@@ -206,9 +206,9 @@ body {
 
 .ruvte-question h2 {
   font-size: clamp(29px, 3.6vw, 48px);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
-  color: var(--white);
+  color: var(--teal-lt);
 }
 
 .ruvte-body {
@@ -421,7 +421,8 @@ body {
   flex-direction: column;
   gap: 14px;
   flex-shrink: 0;
-  margin-top: 24px;
+  margin-top: 28px;
+  margin-bottom: auto;
 }
 
 .info-text {
@@ -760,15 +761,11 @@ body {
 
   /* ── Panel 3 · el panel scrollea internamente ── */
   .panel-infographic {
-    overflow-y: scroll;
+    overflow-y: scroll;                  /* scroll, no auto → más fiable en iOS */
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;  /* inercia iOS */
-    touch-action: pan-y;                /* habilita scroll táctil en Android */
+    -webkit-overflow-scrolling: touch;   /* inercia en Safari/iOS */
     align-items: flex-start;
     justify-content: flex-start;
-    /* sobreescribir overflow:hidden del .panel base */
-    overflow: scroll;
-    overflow-x: hidden;
   }
 
   /* el grid apila columnas y crece con el contenido */
@@ -780,58 +777,58 @@ body {
     width: 100%;
   }
 
-  /* Mapa D3: altura acotada para dejar espacio al contenido */
+  /* Mapa D3: altura reducida para dejar espacio al contenido */
   .info-col-map {
-    height: 28vh;
-    min-height: 180px;
+    height: 32vh;
+    min-height: 200px;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
 
   #choropleth-svg { height: 100%; }
 
-  /* Columna de contenido: crece libre */
+  /* Columna de contenido: crece libre, sin overflow propio */
   .info-col-content {
     height: auto;
     overflow-y: visible;
-    padding: 16px 18px 64px 18px;
+    padding: 20px 18px 72px 18px;   /* 72px abajo para no tapar la flecha nav */
     justify-content: flex-start;
-    gap: 12px;
+    gap: 16px;
   }
 
-  /* Encabezado apilado */
+  /* Encabezado: título arriba, contador debajo */
   .info-header {
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 2px;
+    gap: 4px;
     align-items: flex-start;
   }
 
   .info-main-heading {
-    font-size: clamp(20px, 5vw, 30px);
-    flex: none;
+    font-size: clamp(22px, 5.5vw, 34px);
+    flex: none;          /* en mobile no hay flex-row, no necesita flex:1 */
     width: 100%;
   }
 
   .info-counter-block {
     padding-left: 0;
-    gap: 6px;
-  }
-
-  .mega-counter { font-size: clamp(36px, 10vw, 56px); }
-
-  /* Textos más compactos */
-  .info-texts {
-    margin-top: 0;
     gap: 8px;
   }
 
-  .info-text {
-    font-size: 12px;
-    line-height: 1.55;
+  .mega-counter  { font-size: clamp(40px, 11vw, 64px); }
+
+  /* Textos */
+  .info-texts {
+    margin-top: 0;
+    gap: 10px;
   }
 
-  /* Treemap: siempre visible */
+  .info-text {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Treemap: compacto pero siempre visible */
   .treemap-section {
     margin-top: 0;
     flex-shrink: 0;
@@ -839,9 +836,9 @@ body {
   }
 
   #treemap-container {
-    min-height: 110px;
-    max-height: 145px;
-    height: 130px;
+    min-height: 120px;
+    max-height: 160px;
+    height: 140px;
   }
 
   /* Panel 4 */
