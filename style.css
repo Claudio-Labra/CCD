@@ -386,7 +386,8 @@ body {
   line-height: 1.2;
   color: var(--teal-lt);
   letter-spacing: -0.02em;
-  flex-shrink: 0;
+  flex: 1 1 auto;   /* ocupa todo el ancho disponible → alineado con textos y treemap */
+  min-width: 0;
 }
 
 .info-counter-block {
@@ -726,97 +727,119 @@ body {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* ── Notebook / pantalla mediana (901 – 1280 px) ── */
+@media (min-width: 901px) and (max-width: 1280px) {
+
+  .info-col-content {
+    padding: 28px 36px 24px 36px;   /* menos padding vertical y lateral */
+  }
+
+  .info-texts {
+    margin-top: 14px;
+    gap: 10px;
+  }
+
+  .info-text {
+    font-size: clamp(14px, 1.1vw, 16px);
+    line-height: 1.65;
+  }
+
+  #treemap-container {
+    min-height: 100px;
+    max-height: 170px;
+  }
+}
+
+/* ── Mobile / tablet (≤ 900 px) ── */
 @media (max-width: 900px) {
 
   /* ── Panel 2 · RUVTE ── */
-  .ruvte-inner { grid-template-columns: 1fr; gap: 30px; }
-  .ruvte-stat-row { flex-direction: column; gap: 20px; }
+  .ruvte-inner      { grid-template-columns: 1fr; gap: 30px; }
+  .ruvte-stat-row   { flex-direction: column; gap: 20px; }
 
-  /* ── Panel 3 · Infografía: scroll interno ── */
-
-  /* El panel pasa a ser scrolleable en lugar de overflow:hidden */
+  /* ── Panel 3 · el panel scrollea internamente ── */
   .panel-infographic {
-    overflow-y: auto;
+    overflow-y: scroll;                  /* scroll, no auto → más fiable en iOS */
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;   /* inercia en Safari/iOS */
     align-items: flex-start;
     justify-content: flex-start;
   }
 
-  /* El layout apila las dos columnas y crece con el contenido */
+  /* el grid apila columnas y crece con el contenido */
   .info-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto;   /* ambas filas toman su altura natural */
+    grid-template-rows: auto auto;
     height: auto;
     min-height: 100vh;
     width: 100%;
   }
 
-  /* Mapa D3: altura fija razonable en mobile */
+  /* Mapa D3: altura reducida para dejar espacio al contenido */
   .info-col-map {
-    height: 42vh;
-    min-height: 240px;
+    height: 32vh;
+    min-height: 200px;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
 
-  #choropleth-svg {
-    height: 100%;
-  }
+  #choropleth-svg { height: 100%; }
 
-  /* Columna de contenido: se expande sin overflow propio */
+  /* Columna de contenido: crece libre, sin overflow propio */
   .info-col-content {
     height: auto;
     overflow-y: visible;
-    padding: 28px 20px 90px 20px; /* 90px abajo para la flecha nav */
+    padding: 20px 18px 72px 18px;   /* 72px abajo para no tapar la flecha nav */
     justify-content: flex-start;
-    gap: 20px;
+    gap: 16px;
   }
 
-  /* Encabezado: apilado en lugar de inline */
+  /* Encabezado: título arriba, contador debajo */
   .info-header {
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 8px;
+    gap: 4px;
     align-items: flex-start;
   }
 
   .info-main-heading {
-    font-size: clamp(24px, 6vw, 38px);
+    font-size: clamp(22px, 5.5vw, 34px);
+    flex: none;          /* en mobile no hay flex-row, no necesita flex:1 */
+    width: 100%;
   }
 
   .info-counter-block {
     padding-left: 0;
+    gap: 8px;
+  }
+
+  .mega-counter  { font-size: clamp(40px, 11vw, 64px); }
+
+  /* Textos */
+  .info-texts {
+    margin-top: 0;
     gap: 10px;
   }
 
-  .mega-counter {
-    font-size: clamp(44px, 12vw, 72px);
-  }
-
-  /* Textos: reducir tamaño y espaciado */
-  .info-texts {
-    margin-top: 4px;
-    gap: 12px;
-  }
-
   .info-text {
-    font-size: 14px;
-    line-height: 1.65;
+    font-size: 13px;
+    line-height: 1.6;
   }
 
-  /* Treemap: siempre visible, altura fija */
+  /* Treemap: compacto pero siempre visible */
   .treemap-section {
-    margin-top: 8px;
+    margin-top: 0;
     flex-shrink: 0;
     justify-content: flex-start;
   }
 
   #treemap-container {
-    min-height: 150px;
-    max-height: 200px;
-    height: 170px;
+    min-height: 120px;
+    max-height: 160px;
+    height: 140px;
   }
 
-  /* ── Otros ── */
+  /* Panel 4 */
   .map-ui { flex-wrap: wrap; }
 }
