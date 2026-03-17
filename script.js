@@ -83,12 +83,12 @@ const GEOJSON_URL='argentina.geojson';
 const TREEMAP_DATA={
 name:'root',
 children:[
-{name:'Fuerza de Seguridad Provincial',short:'F.S. Provincial',value:437,color:'#0a7a7a'},
-{name:'Fuerza de Seguridad Federal',short:'F.S. Federal',value:125,color:'#0db8b8'},
-{name:'Otros',short:'Otros',value:108,color:'#1e3a3a'},
-{name:'Ejército',short:'Ejército',value:105,color:'#1adada'},
-{name:'Armada',short:'Arm.',value:17,color:'#3a7fd5'},
-{name:'Fuerza Aérea',short:'F.A.',value:15,color:'#55aaee'}
+{name:'Fuerza de Seguridad Provincial',short:'F.S. Provincial',value:437,color:'#e63946'},
+{name:'Fuerza de Seguridad Federal',short:'F.S. Federal',value:125,color:'#457b9d'},
+{name:'Otros',short:'Otros',value:108,color:'#6c757d'},
+{name:'Ejército',short:'Ejército',value:105,color:'#2a9d8f'},
+{name:'Armada',short:'Arm.',value:17,color:'#f4a261'},
+{name:'Fuerza Aérea',short:'F.A.',value:15,color:'#9b5de5'}
 ]};
 
 /* ─────────────────────────────────────────────────────────
