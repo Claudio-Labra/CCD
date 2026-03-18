@@ -183,16 +183,16 @@ body {
 }
 
 .ruvte-question a{
-  color: var(--teal-lt);
+  color: var(--white);
   text-decoration:none;
 }
 
 .ruvte-question a:visited{
-  color: var(--teal-lt);
+  color: var(--white);
 }
 
 .ruvte-question a:hover{
-  color: var(--teal-lt);
+  color: var(--white);
 }
 
 .question-glyph {
@@ -208,7 +208,7 @@ body {
   font-size: clamp(29px, 3.6vw, 48px);
   font-weight: 800;
   line-height: 1.2;
-  color: var(white);
+  color: var(--white);
 }
 
 .ruvte-body {
