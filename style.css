@@ -593,14 +593,15 @@ body {
 .map-legend {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  pointer-events: none;
-  background: rgba(12,12,12,0.88);
+  gap: 6px;
+  pointer-events: all;
+  background: rgba(12,12,12,0.92);
   border: 1px solid var(--border);
-  padding: 12px 16px;
+  padding: 14px 20px;
   border-radius: 2px;
-  min-width: 200px;
+  min-width: 230px;
   margin-top: 4px;
+  backdrop-filter: blur(6px);
 }
 
 .legend-title {
@@ -609,26 +610,65 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: color 0.2s;
+  user-select: none;
+}
+
+.legend-title:hover {
+  color: var(--teal-lt);
+}
+
+.legend-title.legend-filtered {
+  color: var(--teal);
+}
+
+.legend-title.legend-filtered::after {
+  content: ' ✕';
+  font-size: 9px;
+  opacity: 0.7;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
+  cursor: pointer;
+  padding: 3px 4px;
+  border-radius: 2px;
+  transition: background 0.15s, opacity 0.2s;
+  user-select: none;
+}
+
+.legend-item:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.legend-item.legend-active {
+  background: rgba(255,255,255,0.09);
+}
+
+.legend-item.legend-dimmed {
+  opacity: 0.28;
 }
 
 .legend-dot {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.legend-item:hover .legend-dot {
+  transform: scale(1.25);
 }
 
 .legend-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 300;
-  color: rgba(240,238,234,0.8);
+  color: rgba(240,238,234,0.85);
 }
 
 #mapa-interactivo {
