@@ -1,5 +1,5 @@
 # Cartografía del Terrorismo de Estado en Argentina
-## Centros Clandestinos de Detención · 1976–1983
+## Centros Clandestinos de Detención y Tortura · 1976–1983
 
 ---
 
@@ -17,7 +17,7 @@ Los datos utilizados provienen del **Registro Unificado de Víctimas del Terrori
 
 🔗 [https://www.argentina.gob.ar/derechoshumanos/ANM/rutve](https://www.argentina.gob.ar/derechoshumanos/ANM/rutve)
 
-En particular, se procesó el **último informe oficial del RUVTE**, publicado en **octubre de 2022**, que sistematiza la información sobre los Centros Clandestinos de Detención (CCDs) identificados en todo el territorio nacional.
+En particular, se procesó el **último informe oficial del RUVTE**, publicado en **octubre de 2022**, que sistematiza la información sobre los Centros Clandestinos de Detención y Tortura (CCDs) identificados en todo el territorio nacional.
 
 ---
 
@@ -65,6 +65,8 @@ Las coordenadas obtenidas (latitud y longitud) fueron incorporadas al CSV final 
 La geolocalización automática mediante Nominatim/OpenStreetMap no siempre resuelve correctamente establecimientos históricos, nombres institucionales o direcciones que ya no existen tal como figuran en los registros. Los resultados fueron revisados en **una única ocasión** y de forma general, por lo que es posible que algunos puntos estén ubicados de forma inexacta o incorrecta.
 
 Asimismo, por las limitaciones propias de la **brevedad en la realización de este ensayo**, el archivo CSV final puede contener errores involuntarios en otros campos (nombres, dependencias, jurisdicciones). Este trabajo no reemplaza ni pretende superar la rigurosidad del informe oficial del RUVTE.
+
+También se detectaron diferencias entre la cantidad de **Centros Clandestinos de Detención y Tortura** informados en la página de mapas del RUVTE, donde se detallan **814** centros, y el archivo PDF oficial en el que se detallan los centros clandestinos en todo el territorio nacional, del cual fueron extraídos **807** registros. En este sentido, si bien en los mapas fueron referenciados **807** puntos, dado que se tomó como base de trabajo el documento PDF, en los contadores se indican los **814** centros que informa oficialmente el RUVTE.
 
 Si encontrás un error, podés abrir un **Issue** o un **Pull Request** en este repositorio.
 
