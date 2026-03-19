@@ -468,6 +468,8 @@ let panel4Init=false;
 let leafletMap=null;
 let tileLayer=null;
 let cluster=null;
+let allMarkers=[];
+let activeFilter=null;
 
 function initPanel4(){
 
@@ -523,6 +525,7 @@ tileLayer.addTo(leafletMap);
 
 function buildMapMarkers(data){
 
+allMarkers=[];
 cluster.clearLayers();
 
 data.forEach(row=>{
@@ -536,6 +539,7 @@ const nom=(row['NOMBRE ESTABLECIMIENTO']||'').trim();
 if(!lat||!lon)return;
 
 const color=resolveColor(dep);
+const depKey=resolveDepKey(dep);
 
 const icon=L.divIcon({
 className:'',
@@ -556,6 +560,7 @@ marker.bindPopup(
 <div class="popup-dep">${depS||dep||'-'}</div>`
 );
 
+allMarkers.push({marker,depKey});
 cluster.addLayer(marker);
 
 });
@@ -578,27 +583,94 @@ return DEP_COLORS.otros;
 
 }
 
+function resolveDepKey(dep){
+
+if(!dep)return 'default';
+
+const d=dep.toLowerCase();
+
+if(d.includes('provincial')||d.includes('polici'))return 'provincial';
+if(d.includes('federal')||d.includes('gendarm')||d.includes('prefect'))return 'federal';
+if(d.includes('ejerc'))return 'ejercito';
+if(d.includes('armada')||d.includes('marina'))return 'armada';
+if(d.includes('aerea')||d.includes('aérea'))return 'aerea';
+
+return 'otros';
+
+}
+
+function applyFilter(key){
+
+activeFilter=key;
+cluster.clearLayers();
+
+allMarkers.forEach(({marker,depKey})=>{
+if(depKey===key)cluster.addLayer(marker);
+});
+
+updateLegendUI();
+
+}
+
+function clearFilter(){
+
+activeFilter=null;
+cluster.clearLayers();
+allMarkers.forEach(({marker})=>cluster.addLayer(marker));
+updateLegendUI();
+
+}
+
+function updateLegendUI(){
+
+document.querySelectorAll('.legend-item').forEach(item=>{
+if(activeFilter){
+if(item.dataset.key===activeFilter){
+item.classList.add('legend-active');
+item.classList.remove('legend-dimmed');
+}else{
+item.classList.add('legend-dimmed');
+item.classList.remove('legend-active');
+}
+}else{
+item.classList.remove('legend-active','legend-dimmed');
+}
+});
+
+const title=document.querySelector('.legend-title');
+if(title)title.classList.toggle('legend-filtered',!!activeFilter);
+
+}
+
 function buildLegend(){
 
 const legend=document.getElementById('map-legend');
+legend.innerHTML='';
 
-legend.innerHTML='<div class="legend-title">Dependencia</div>';
+const titleEl=document.createElement('div');
+titleEl.className='legend-title';
+titleEl.textContent='Dependencia';
+titleEl.title='Click para borrar filtro';
+titleEl.addEventListener('click',clearFilter);
+legend.appendChild(titleEl);
 
 const entries=[
-['Fuerza de Seguridad Provincial',DEP_COLORS.provincial],
-['Fuerza de Seguridad Federal',DEP_COLORS.federal],
-['Ejército',DEP_COLORS.ejercito],
-['Armada',DEP_COLORS.armada],
-['Fuerza Aérea',DEP_COLORS.aerea],
-['Otros',DEP_COLORS.otros]
+['Fuerza de Seguridad Provincial',DEP_COLORS.provincial,'provincial'],
+['Fuerza de Seguridad Federal',DEP_COLORS.federal,'federal'],
+['Ejército',DEP_COLORS.ejercito,'ejercito'],
+['Armada',DEP_COLORS.armada,'armada'],
+['Fuerza Aérea',DEP_COLORS.aerea,'aerea'],
+['Otros',DEP_COLORS.otros,'otros']
 ];
 
-entries.forEach(([label,color])=>{
+entries.forEach(([label,color,key])=>{
 const item=document.createElement('div');
 item.className='legend-item';
+item.dataset.key=key;
 item.innerHTML=
 `<span class="legend-dot" style="background:${color}"></span>
 <span class="legend-label">${label}</span>`;
+item.addEventListener('click',()=>applyFilter(key));
 legend.appendChild(item);
 });
 
