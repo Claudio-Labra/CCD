@@ -172,7 +172,7 @@ decimal:','
 };
 
 const cu1=new countUp.CountUp('ruvte-n1',8631,opts);
-const cu2=new countUp.CountUp('ruvte-n2',807,{...opts,separator:''});
+const cu2=new countUp.CountUp('ruvte-n2',814,{...opts,separator:''});
 const cu3=new countUp.CountUp('ruvte-n3',30000,opts);
 
 setTimeout(()=>{
@@ -195,7 +195,7 @@ function initPanel3(){
 if(panel3Init)return;
 panel3Init=true;
 
-const cu=new countUp.CountUp('contador-807',807,{
+const cu=new countUp.CountUp('contador-814',814,{
 duration:2.8,
 useGrouping:false
 });
@@ -382,7 +382,7 @@ const rect=cell.append('rect')
 cell
 .on("mouseover",function(event,d){
 
-const percent=Math.round(d.data.value/807*100);
+const percent=Math.round(d.data.value/814*100);
 
 d3.select(this)
 .raise()
@@ -433,7 +433,7 @@ cell.append('text')
 .style('font-size','20px')
 .style('font-weight','700')
 .style('fill','#ffffff')
-.text(d=>Math.round(d.data.value/807*100)+'%');
+.text(d=>Math.round(d.data.value/814*100)+'%');
 
 
 /* NOMBRE */
